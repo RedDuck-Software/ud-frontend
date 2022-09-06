@@ -10,6 +10,8 @@ export const AppRouteComponent: FC = () => {
         <NavLink to={ROUTES.App}>App</NavLink>
         <br />
         <NavLink to={ROUTES.Dashboard}>Dashboard</NavLink>
+        <br />
+        <NavLink to={ROUTES.ConnectWallet}>Connect Wallet</NavLink>
       </div>
       <Outlet />
     </div>
