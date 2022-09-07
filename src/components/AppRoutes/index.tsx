@@ -1,15 +1,14 @@
 import React from 'react';
-import { Navigate, RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
-import { AppRouteComponent } from '../../AppRouteComponent';
+import App from '../../App';
 import { ROUTES } from '../../config/routes';
 import ConnectWallet from '../../pages/ConnectWallet/ConnectWallet';
+import LandingPage from '../../pages/LandingPage/LandingPage';
 import MintPage from '../../pages/MintPage/MintPage';
 
 export const ROUTES_CONFIG: RouteObject[] = [
   {
-    path: ROUTES.App,
-    element: <AppRouteComponent />,
     children: [
       {
         path: ROUTES.MintPage,
@@ -21,14 +20,6 @@ export const ROUTES_CONFIG: RouteObject[] = [
         element: <ConnectWallet />,
         caseSensitive: true,
       },
-      {
-        path: '*',
-        element: <Navigate to={ROUTES.Dashboard} replace />,
-      },
     ],
-  },
-  {
-    path: '*',
-    element: <Navigate to={ROUTES.Dashboard} replace />,
   },
 ];
