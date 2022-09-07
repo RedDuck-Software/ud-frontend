@@ -1,9 +1,8 @@
-import React from 'react';
-//import { Link } from 'react-router-dom';
-
 import './landingPage.scss';
-//import { ROUTES } from '../../config/routes';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
+import { ROUTES } from '../../config/routes';
 import image1 from '../../images/image-1.png';
 import image2 from '../../images/image-2.png';
 
@@ -17,7 +16,9 @@ const LandingPage = () => {
         <div className="landing__dark-bg">
           <div className="container">
             <div className="landing__button-wrapper">
-              <button className="button">shut up and take my money!</button>
+              <Link to={ROUTES.MintPage}>
+                <button className="button">shut up and take my money!</button>
+              </Link>
             </div>
           </div>
           <hr className="green-line" />
@@ -38,7 +39,9 @@ const LandingPage = () => {
           <hr className="green-line" />
           <div className="container">
             <div className="landing__button-wrapper">
-              <button className="button">open app</button>
+              <Link to={ROUTES.MintPage}>
+                <button className="button">open app</button>
+              </Link>
             </div>
           </div>
           <div className="landing__images-wrapper">
