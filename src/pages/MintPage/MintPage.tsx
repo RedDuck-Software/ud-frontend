@@ -1,12 +1,11 @@
 import { useWeb3React } from '@web3-react/core';
 import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { useMoralisWeb3Api } from 'react-moralis';
 
 import NFT from '../../components/NFT/NFT';
 import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
+import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { CryptoBuggy__factory } from '../../typechain';
-import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
 
 function MintPage() {
@@ -14,7 +13,7 @@ function MintPage() {
   const [buggyPrice, setBuggyPrice] = useState<BigNumber>(BigNumber.from(0));
   const [isError, setIsError] = useState(false);
   const { account, connector } = useWeb3React();
-  const Web3Api = useMoralisWeb3Api();
+  const { fetchNFTsForContract } = useGetBuggyNFTs();
 
   const getContract = async () => {
     if (!connector) return;
@@ -28,19 +27,6 @@ function MintPage() {
     );
 
     return cryptoBuggyContract;
-  };
-
-  const fetchNFTsForContract = async (contractAddress: string) => {
-    console.log(contractAddress);
-    const options = {
-      chain: 'rinkeby',
-      address: account,
-      token_address: contractAddress,
-    };
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const rinkebyNFTs = await Web3Api.account.getNFTsForContract(options);
-    console.log(rinkebyNFTs);
   };
 
   const addFund = async () => {
@@ -88,28 +74,32 @@ function MintPage() {
   return (
     <div className="landing__background-photo">
       <div className="landing__dark-bg">
-        <nav className='landing__nav'>
+        <nav className="landing__nav">
           <p>Buggy DAO 12.9 DAO</p>
           <button className="landing__nav-center-button">
             Multipy your donation by x3
           </button>
-          <button className='landing__nav-connect-wallet'>Connect wallet</button>
+          <button className="landing__nav-connect-wallet">
+            Connect wallet
+          </button>
         </nav>
         <hr className="green-line" />
-        <div className='landing__balances-bg'>
-          <div className='landing__balances-container'>
+        <div className="landing__balances-bg">
+          <div className="landing__balances-container">
             <div
               style={{ borderRadius: '25px 0px 0px 0px' }}
-              className='landing__balances-currency-amount'>
-              <div className='landing__balances-text-wrapper'>
+              className="landing__balances-currency-amount"
+            >
+              <div className="landing__balances-text-wrapper">
                 <p>Ethereum</p>
                 <p>0.09 ETH</p>
               </div>
             </div>
             <div
               style={{ background: 'none' }}
-              className='landing__balances-currency-amount'>
-              <div className='landing__balances-text-wrapper'>
+              className="landing__balances-currency-amount"
+            >
+              <div className="landing__balances-text-wrapper">
                 <p>USD Coin</p>
                 <p>3.18 USDC</p>
               </div>
@@ -117,7 +107,7 @@ function MintPage() {
           </div>
         </div>
         <hr className="green-line" />
-        <div className='landing__nfts-container'>
+        <div className="landing__nfts-container">
           <NFT />
         </div>
         <div className="input-wrapper">
@@ -132,8 +122,11 @@ function MintPage() {
           {isError && <span>Amount in input is not correct</span>}
           <button onClick={() => addFund()}>Donate</button>
         </div>
-        <p>Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}</p>
+        <p>
+          Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}
+        </p>
       </div>
+      <p>Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}</p>
     </div>
   );
 }
