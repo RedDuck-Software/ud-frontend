@@ -3,9 +3,10 @@ import {
   SafeAppConnector,
 } from '@gnosis.pm/safe-apps-web3-react';
 import React, { FC } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import LandingPage from './pages/LandingPage/LandingPage';
+import MintPage from './pages/MintPage/MintPage';
 
 const safeMultisigConnector = new SafeAppConnector();
 
@@ -20,9 +21,10 @@ const App: FC = () => {
 
   return (
     <>
-      <BrowserRouter>
-        <LandingPage />
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/mint-page" element={<MintPage />} />
+      </Routes>
     </>
   );
 };

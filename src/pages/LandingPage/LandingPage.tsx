@@ -4,6 +4,9 @@ import React from 'react';
 import './landingPage.scss';
 //import { ROUTES } from '../../config/routes';
 
+import image1 from '../../images/image-1.png';
+import image2 from '../../images/image-2.png';
+
 const LandingPage = () => {
   return (
     <div className="landing__wrapper">
@@ -32,6 +35,18 @@ const LandingPage = () => {
               Lorem Ipsum.
             </p>
           </div>
+          <hr className="green-line" />
+          <div className="container">
+            <div className="landing__button-wrapper">
+              <button className="button">open app</button>
+            </div>
+          </div>
+          <div className="landing__images-wrapper">
+            <div className="landing__images-wrapper-bg"></div>
+            <img src={image1} />
+            <img src={image2} />
+          </div>
+          <hr className="green-line-2" />
         </div>
       </div>
     </div>
