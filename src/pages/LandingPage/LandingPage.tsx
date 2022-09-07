@@ -1,5 +1,8 @@
 import React from 'react';
+//import { Link } from 'react-router-dom';
+
 import './landingPage.scss';
+//import { ROUTES } from '../../config/routes';
 
 const LandingPage = () => {
   return (
@@ -11,7 +14,7 @@ const LandingPage = () => {
         <div className="landing__dark-bg">
           <div className="container">
             <div className="landing__button-wrapper">
-              <button className="button">shut up and take your money!</button>
+              <button className="button">shut up and take my money!</button>
             </div>
           </div>
           <hr className="green-line" />
