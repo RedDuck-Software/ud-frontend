@@ -1,13 +1,13 @@
 import React from 'react';
-//import { Link } from 'react-router-dom';
-
 import './landingPage.scss';
-//import { ROUTES } from '../../config/routes';
+import { useNavigate } from 'react-router-dom';
 
 import image1 from '../../images/image-1.png';
 import image2 from '../../images/image-2.png';
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="landing__wrapper">
       <button className="landing__top-button">
@@ -17,7 +17,9 @@ const LandingPage = () => {
         <div className="landing__dark-bg">
           <div className="container">
             <div className="landing__button-wrapper">
-              <button className="button">shut up and take my money!</button>
+              <button className="button" onClick={() => navigate('/mint-page')}>
+                shut up and take my money!
+              </button>
             </div>
           </div>
           <hr className="green-line" />
@@ -38,7 +40,9 @@ const LandingPage = () => {
           <hr className="green-line" />
           <div className="container">
             <div className="landing__button-wrapper">
-              <button className="button">open app</button>
+              <button className="button" onClick={() => navigate('/mint-page')}>
+                open app
+              </button>
             </div>
           </div>
           <div className="landing__images-wrapper">
