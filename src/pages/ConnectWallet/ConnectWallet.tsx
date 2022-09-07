@@ -1,6 +1,7 @@
 import { useWeb3React } from '@web3-react/core';
 import React from 'react';
 import { useState } from 'react';
+import './connectWallet.scss';
 
 import { uauth, gnosisconnect } from '../../helper/connectors';
 
@@ -37,7 +38,7 @@ const ConnectWallet = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       {user && <span>Connected user: {user}</span>}
       {account && !user && <span>Connected account: {account}</span>}
       <button onClick={handleLogin}>ConnectWallet</button>
