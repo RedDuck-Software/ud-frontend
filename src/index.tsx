@@ -1,29 +1,26 @@
-import { Web3Provider } from '@ethersproject/providers';
-import { Web3ReactProvider } from '@web3-react/core';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { MoralisProvider } from 'react-moralis';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './App';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 
-function getLibrary(provider: any) {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
-}
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+
 root.render(
   <React.StrictMode>
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <Router>
+    <Router>
+      <MoralisProvider
+        serverUrl="https://s3jkkgvi79jc.usemoralis.com:2053/server"
+        appId="w6lNar7mUnKjVtrYnnB1AdbO6F5juFIbpELXP1cO"
+      >
         <App />
-      </Router>
-    </Web3ReactProvider>
+      </MoralisProvider>
+    </Router>
   </React.StrictMode>,
 );
 
