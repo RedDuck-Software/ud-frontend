@@ -5,7 +5,7 @@ import {
 import React, { FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { RenderRoutes } from './components/RenderRoutes';
+import LandingPage from './pages/LandingPage/LandingPage';
 
 const safeMultisigConnector = new SafeAppConnector();
 
@@ -21,7 +21,7 @@ const App: FC = () => {
   return (
     <>
       <BrowserRouter>
-        <RenderRoutes />
+        <LandingPage />
       </BrowserRouter>
     </>
   );
