@@ -2,11 +2,23 @@ import { useWeb3React } from '@web3-react/core';
 import React from 'react';
 import { useState } from 'react';
 
-import { uauth } from '../../helper/connectors';
+import { uauth, gnosisconnect } from '../../helper/connectors';
 
 const ConnectWallet = () => {
-  const { activate, deactivate } = useWeb3React();
+  const { activate, deactivate, account } = useWeb3React();
   const [user, setUser] = useState<string>();
+  const [isGnosisError, setGnosisError] = useState(false);
+
+  async function connectGnosis() {
+    await activate(gnosisconnect);
+    const isSafeApp = await gnosisconnect.isSafeApp();
+
+    if (!isSafeApp) {
+      setGnosisError(true);
+    } else {
+      setGnosisError(false);
+    }
+  }
 
   async function handleLogin() {
     await activate(uauth);
@@ -21,13 +33,17 @@ const ConnectWallet = () => {
   async function handleLogout() {
     deactivate();
     setUser('');
+    setGnosisError(false);
   }
 
   return (
     <div>
-      <span>Connected user: {user}</span>
+      {user && <span>Connected user: {user}</span>}
+      {account && !user && <span>Connected account: {account}</span>}
       <button onClick={handleLogin}>ConnectWallet</button>
+      <button onClick={connectGnosis}>Connect Gnosis</button>
       <button onClick={handleLogout}>Disconnect wallet</button>
+      {isGnosisError && <span>The app is loaded outside safe context</span>}
     </div>
   );
 };

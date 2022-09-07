@@ -1,3 +1,4 @@
+import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
 import UAuth from '@uauth/js';
 import { UAuthConnector } from '@uauth/web3-react';
 import type { AbstractConnector } from '@web3-react/abstract-connector';
@@ -11,6 +12,8 @@ export const walletconnect = new WalletConnectConnector({
   infuraId: 'c57d500279994e2ca6e832456b0ed250',
   qrcode: true,
 });
+
+export const gnosisconnect = new SafeAppConnector({});
 
 export const uauth = new UAuthConnector({
   uauth: new UAuth({
