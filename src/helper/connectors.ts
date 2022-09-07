@@ -6,7 +6,7 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 
 // Instanciate your other connectors.
-export const injected = new InjectedConnector({ supportedChainIds: [1, 5] });
+export const injected = new InjectedConnector({ supportedChainIds: [1, 4, 5] });
 
 export const walletconnect = new WalletConnectConnector({
   infuraId: 'c57d500279994e2ca6e832456b0ed250',
