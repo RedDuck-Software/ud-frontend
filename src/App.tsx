@@ -9,6 +9,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import LandingPage from './pages/LandingPage/LandingPage';
 import MintPage from './pages/MintPage/MintPage';
+import StatisticPage from './pages/StatisticPage/Statistic';
 
 const safeMultisigConnector = new SafeAppConnector();
 
@@ -32,6 +33,7 @@ const App: FC = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/mint-page" element={<MintPage />} />
+          <Route path="/statistic-page" element={<StatisticPage />} />
         </Routes>
       </Web3ReactProvider>
     </>

@@ -27,18 +27,21 @@ import type {
   PromiseOrValue,
 } from "./common";
 
-export interface NFTInterface extends utils.Interface {
+export interface PartialBuggyNFTInterface extends utils.Interface {
   functions: {
+    "addPartialUser(uint256,string,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "createdNFT()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getImage(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintToken(address,string)": FunctionFragment;
+    "mintToken()": FunctionFragment;
     "minter()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "ownershipRecord(uint256)": FunctionFragment;
+    "ownershipRecord(uint256,address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
@@ -55,9 +58,12 @@ export interface NFTInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "addPartialUser"
       | "approve"
       | "balanceOf"
+      | "createdNFT"
       | "getApproved"
+      | "getImage"
       | "isApprovedForAll"
       | "mintToken"
       | "minter"
@@ -80,6 +86,14 @@ export interface NFTInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "addPartialUser",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
@@ -88,17 +102,22 @@ export interface NFTInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "createdNFT",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getImage",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "mintToken",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: "mintToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "minter", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -108,7 +127,7 @@ export interface NFTInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "ownershipRecord",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -166,12 +185,18 @@ export interface NFTInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "addPartialUser",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "createdNFT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getImage", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
@@ -280,12 +305,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface NFT extends BaseContract {
+export interface PartialBuggyNFT extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: NFTInterface;
+  interface: PartialBuggyNFTInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -307,6 +332,13 @@ export interface NFT extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addPartialUser(
+      _id: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<string>,
+      _user: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -318,8 +350,15 @@ export interface NFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    createdNFT(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getImage(
+      _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -330,8 +369,6 @@ export interface NFT extends BaseContract {
     ): Promise<[boolean]>;
 
     mintToken(
-      sponsor: PromiseOrValue<string>,
-      signature: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -348,8 +385,9 @@ export interface NFT extends BaseContract {
 
     ownershipRecord(
       arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[string, string] & { tokenURI: string; signature: string }>;
+    ): Promise<[string]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -414,6 +452,13 @@ export interface NFT extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  addPartialUser(
+    _id: PromiseOrValue<BigNumberish>,
+    signature: PromiseOrValue<string>,
+    _user: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   approve(
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
@@ -425,8 +470,15 @@ export interface NFT extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  createdNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
   getApproved(
     tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getImage(
+    _id: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -437,8 +489,6 @@ export interface NFT extends BaseContract {
   ): Promise<boolean>;
 
   mintToken(
-    sponsor: PromiseOrValue<string>,
-    signature: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -455,8 +505,9 @@ export interface NFT extends BaseContract {
 
   ownershipRecord(
     arg0: PromiseOrValue<BigNumberish>,
+    arg1: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<[string, string] & { tokenURI: string; signature: string }>;
+  ): Promise<string>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -521,6 +572,13 @@ export interface NFT extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    addPartialUser(
+      _id: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<string>,
+      _user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -532,8 +590,15 @@ export interface NFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    createdNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getImage(
+      _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -543,11 +608,7 @@ export interface NFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mintToken(
-      sponsor: PromiseOrValue<string>,
-      signature: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    mintToken(overrides?: CallOverrides): Promise<void>;
 
     minter(overrides?: CallOverrides): Promise<string>;
 
@@ -562,8 +623,9 @@ export interface NFT extends BaseContract {
 
     ownershipRecord(
       arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[string, string] & { tokenURI: string; signature: string }>;
+    ): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -671,6 +733,13 @@ export interface NFT extends BaseContract {
   };
 
   estimateGas: {
+    addPartialUser(
+      _id: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<string>,
+      _user: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -682,8 +751,15 @@ export interface NFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    createdNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getImage(
+      _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -694,8 +770,6 @@ export interface NFT extends BaseContract {
     ): Promise<BigNumber>;
 
     mintToken(
-      sponsor: PromiseOrValue<string>,
-      signature: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -712,6 +786,7 @@ export interface NFT extends BaseContract {
 
     ownershipRecord(
       arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -779,6 +854,13 @@ export interface NFT extends BaseContract {
   };
 
   populateTransaction: {
+    addPartialUser(
+      _id: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<string>,
+      _user: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -790,8 +872,15 @@ export interface NFT extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    createdNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getImage(
+      _id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -802,8 +891,6 @@ export interface NFT extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mintToken(
-      sponsor: PromiseOrValue<string>,
-      signature: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -820,6 +907,7 @@ export interface NFT extends BaseContract {
 
     ownershipRecord(
       arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

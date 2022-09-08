@@ -1,22 +1,27 @@
 import { useWeb3React } from '@web3-react/core';
-import { BigNumber, ethers } from 'ethers';
+import {ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
+import { Audio } from 'react-loader-spinner'
 
-// import NFT from '../../components/NFT/NFT';
-import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
-import './mintPage.scss';
+import './Statistic.scss';
 
-function MintPage() {
+function StatisticPage() {
   const [isModalActive, setIsModalActive] = useState(false);
 
   const [user, setUser] = useState<string>();
   const [isGnosisError, setGnosisError] = useState(false);
-  const [amountToDonate, setAmountToDonate] = useState('0');
-  const [buggyPrice, setBuggyPrice] = useState<BigNumber>(BigNumber.from(0));
-  const [isError, setIsError] = useState(false);
+
+  const [totalBoughtBuggy,setTotalBoughtBugg] = useState<number>()
+  const [totalUsers,setTotalUsers] = useState<number>()
+  const [totalCreatedBuggy,setTotalCreatedBuggy] = useState<number>()
+  // const [totalFundsInvested,setTotalFundsInvested] = useState<number>()
+
+
+  // const [isError, setIsError] = useState(false);
+
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
 
@@ -27,58 +32,62 @@ function MintPage() {
     );
     const signer = provider.getSigner();
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
-      CRYPTO_BUGGY_ADDRESS,
+      '0x607fB2bEc6464Ab3f730eA6fd00807185197D334',
       signer,
     );
 
     return cryptoBuggyContract;
   };
+  
+  const getTotalUsers = async () => {
+  
+    const cryptoBuggyContract = await getContract()
+    
+    if(!cryptoBuggyContract) return
+    console.log('uniqUsers',await cryptoBuggyContract.buggyNFT())
 
-  const addFund = async () => {
-    if (+amountToDonate <= 0 || +amountToDonate >= 2000) {
-      setIsError(true);
-      return;
-    }
-    try {
-      const contract = await getContract();
-      if (!contract) return;
-      const addFundTx = await contract.addFund('test signature', 1, {
-        value: buggyPrice,
-      });
-      await addFundTx.wait();
-      console.log('Funds sended');
-    } catch (e) {
-      console.log(e);
-    }
-
-    setIsError(false);
+    const uniqUsers = await cryptoBuggyContract.uniqUsers()
+    setTotalUsers(uniqUsers.toNumber())
+    
+    console.log('boughtBuggy',uniqUsers.toNumber());
   };
 
-  async function handleLogout() {
-    deactivate();
-    setUser('');
-    setGnosisError(false);
+  const getBoughtBuggy = async () => {
+    const cryptoBuggyContract = await getContract()
+    
+    if(!cryptoBuggyContract) return
+
+    const boughtBuggy = await cryptoBuggyContract.boughtBuggy()
+    setTotalBoughtBugg(boughtBuggy.toNumber())
+    console.log('boughtBuggy',boughtBuggy.toNumber());
   };
 
-  useEffect(() => {
-    const getBuggyPrice = async () => {
-      const contract = await getContract();
-      if (!contract) return;
-      const result = await contract.price();
-      return result;
-    };
-    getBuggyPrice().then((res) => {
-      console.log(
-        'Price of 1 buggy: ',
-        res && ethers.utils.formatUnits(res.toString()),
-      );
-      res && setBuggyPrice(res);
-    });
-  }, [account]);
+  const getTotalCreatedBuggy = async () => {
+    const cryptoBuggyContract = await getContract()
+    
+    if(!cryptoBuggyContract) return
+
+    const totalCreatedBuggy = await cryptoBuggyContract.boughtBuggy()
+    setTotalCreatedBuggy(totalCreatedBuggy.toNumber())
+    console.log('totalCreatedBuggy',totalCreatedBuggy.toNumber());
+  };
+
+  // const getTotalDonatedFunds = async () => {
+  //     if(totalBoughtBuggy == undefined || totalBoughtBuggy == null) return;
+
+  //     const res = totalBoughtBuggy * 1500
+  //     setTotalFundsInvested(res);
+  //     console.log('res',res);
+  //   };
 
   useEffect(() => {
+    getTotalUsers()
+    getBoughtBuggy()
+    getTotalCreatedBuggy()
+    // getTotalDonatedFunds()
+
     if (!account) return;
-
+  
     fetchNFTsForContract('0x151893e0913BE2D12ADcfbF104bF6559027eDBF0');
   }, [account]);
 
@@ -91,6 +100,11 @@ function MintPage() {
     } else return 'Connect wallet';
   };
 
+  async function handleLogout() {
+    deactivate();
+    setUser('');
+    setGnosisError(false);
+  }
   return (
     <div className="mint-page__background-photo">
       {isModalActive &&
@@ -100,7 +114,7 @@ function MintPage() {
           setGnosisError={setGnosisError}
           isGnosisError={isGnosisError}
         />}
-      <div className="mint-page__dark-bg">
+  <div className="mint-page__dark-bg">
         <nav className="mint-page__nav">
           <p>Buggy DAO 12.9 DAO</p>
           <button className="mint-page__nav-center-button">
@@ -108,66 +122,61 @@ function MintPage() {
           </button>
           <button
             className="mint-page__nav-connect-wallet"
-            style={user || account ? {
-              background: '#232622',
-              color: 'white',
-            } : {}}
-            onClick={() => account || user
-              ? handleLogout() : setIsModalActive(true)}>
+            style={
+              user || account
+                ? {
+                    background: '#232622',
+                    color: 'white',
+                  }
+                : {}
+            }
+            onClick={() =>
+              account || user ? handleLogout() : setIsModalActive(true)
+            }
+          >
             {buttonText()}
           </button>
         </nav>
-        <hr className="green-line" />
-        <div className="mint-page__nfts">
-          <div className="container">
-            <div className="mint-page__nfts-grid">{/* <NFT /> */}</div>
-          </div>
+        <div className='statistic-header'>
+        <Audio
+              height="80"
+              width="80"
+              color="#2df30d"
+              ariaLabel="loading"
+            />
+          <h1 className='statistic-title'>Buggy DAO Statistic</h1>
+          <Audio
+              height="80"
+              width="80"
+              color="#2df30d"
+              ariaLabel="loading"
+            />
         </div>
-        <div className="mint-page__balances-bg">
-          <span className="mint-page__balances-text">Balances</span>
-          <div className="mint-page__balances-container">
-            <div
-              style={{ borderRadius: '25px 0px 0px 0px' }}
-              className="mint-page__balances-currency-amount"
-            >
-              <div className="mint-page__balances-text-wrapper">
-                <p>Ethereum</p>
-                <p>0.09 ETH</p>
-              </div>
+        
+        <div className='statistic'>
+            <div>
+              <h2>Total users</h2>
+              <div className='statistic-cirle'>{totalUsers?totalUsers: '...'}</div>
             </div>
-            <div
-              style={{ background: 'none' }}
-              className="mint-page__balances-currency-amount"
-            >
-              <div className="mint-page__balances-text-wrapper">
-                <p>USD Coin</p>
-                <p>3.18 USDC</p>
-              </div>
+            <div >
+              <h2>Total bought buggy</h2>
+              <div className='statistic-cirle'>{totalBoughtBuggy?totalBoughtBuggy:'...'}</div>
             </div>
-          </div>
+            <div >
+              <h2>Total created buggy</h2>
+              <div className='statistic-cirle'>{totalCreatedBuggy?totalCreatedBuggy:'...'}</div>
+            </div>
+            <div>
+             <h2>Total donated funds(MATIC)</h2>
+             <div className='statistic-cirle'>{totalBoughtBuggy?totalBoughtBuggy * 1500:'...'} </div>
+
+            </div>
         </div>
-        <hr className="green-line" />
-        <div className="mint-page__content">
-          <input
-            placeholder="Amount to donate..."
-            type="number"
-            min="0"
-            max="2000"
-            value={amountToDonate}
-            onChange={(event) => setAmountToDonate(event.target.value)}
-          ></input>
-          {isError && <span>Amount in input is not correct</span>}
+       
+
         </div>
-        <div className="input-wrapper">
-          <button onClick={() => !account? setIsModalActive(true):addFund()}>Donate</button>
-        </div>
-        <p>
-          Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}
-        </p>
-      </div>
-      <p>Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}</p>
     </div>
   );
 }
 
-export default MintPage;
+export default StatisticPage;
