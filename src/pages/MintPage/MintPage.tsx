@@ -10,6 +10,7 @@ import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
+import { useNavigate } from 'react-router-dom';
 
 function MintPage() {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -24,6 +25,8 @@ function MintPage() {
   const [isError, setIsError] = useState(false);
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
+
+  const navigate = useNavigate();
 
   const getContract = async () => {
     if (!connector) return;
@@ -198,8 +201,12 @@ function MintPage() {
             ></textarea>
           </div>
         </div>
-        <button className="mint-page__donate-btn" onClick={() => addFund()}>
+        <button className="mint-page__donate-btn" onClick={() => !account?setIsModalActive(true):addFund()}>
           Donate
+        </button>        
+
+        <button className="mint-page__donate-btn" onClick={() => !account?setIsModalActive(true):navigate('/statistic-page')}>
+                Visit Statistic
         </button>
       </div>
     </div>
