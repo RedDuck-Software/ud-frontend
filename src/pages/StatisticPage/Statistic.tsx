@@ -2,8 +2,8 @@ import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { Audio } from 'react-loader-spinner'
-import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 
+import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
