@@ -139,7 +139,7 @@ function MintPage() {
       setBuggyPrice(Number(price) / Math.pow(10, 18));
 
       if (!account) return;
-      const nftsData = await fetchNFTsForContract(nftAddr);
+      const nftsData:any = await fetchNFTsForContract(nftAddr);
       console.log(nftsData);
 
       const buggyBalance = await buggyTokenContract.balanceOf(account);
@@ -149,7 +149,7 @@ function MintPage() {
 
       if (nftsData && nftsData.length) {
         const nftsImages = await Promise.all(
-          nftsData.map(async (item) => {
+          nftsData.map(async (item:any) => {
             const image = await buggyNFTContract.getImage(item.token_id);
             return { id: item.token_id, image };
           }),
