@@ -3,14 +3,11 @@ import React from 'react';
 import './connectWallet.scss';
 
 import { uauth, gnosisconnect, injected } from '../../helper/connectors';
+import cross from '../../images/icons-close.png';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ConnectWallet = (props: any) => {
-  const {
-    setIsActive,
-    setUser,
-    setGnosisError,
-    isGnosisError } = props;
+  const { setIsActive, setUser, setGnosisError, isGnosisError } = props;
   const { activate } = useWeb3React();
 
   async function connectMetamask() {
@@ -20,7 +17,7 @@ const ConnectWallet = (props: any) => {
     } catch (e) {
       console.log(e);
     }
-  };
+  }
 
   async function connectGnosis() {
     await activate(gnosisconnect);
@@ -32,7 +29,7 @@ const ConnectWallet = (props: any) => {
       setGnosisError(false);
       setIsActive(false);
     }
-  };
+  }
 
   async function handleLogin() {
     await activate(uauth);
@@ -43,24 +40,23 @@ const ConnectWallet = (props: any) => {
       setUser(userObj.value);
       setIsActive(false);
     }
-  };
+  }
 
   return (
-    <div
-      className="modal"
-      onClick={() => setIsActive(false)}>
-      <div
-        className='modal__content'
-        onClick={e => e.stopPropagation()}
-      >
-
-        <div className='modal__content-buttons-wrapper'>
+    <div className="modal">
+      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
+        <img
+          src={cross}
+          className="cross-icon"
+          onClick={() => setIsActive(false)}
+        />
+        <div className="modal__content-buttons-wrapper">
           <button onClick={handleLogin}>Connect Unstoppable Domains</button>
           <button onClick={connectGnosis}>Connect Gnosis</button>
           <button onClick={connectMetamask}>Connect Metamask</button>
           {isGnosisError && <span>The app is loaded outside safe context</span>}
         </div>
-      </div >
+      </div>
     </div>
   );
 };
