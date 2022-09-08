@@ -1,12 +1,16 @@
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { Audio } from 'react-loader-spinner';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
+import { Audio } from 'react-loader-spinner'
+import { useNavigate } from 'react-router-dom';
 
+import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
-import { CryptoBuggy__factory } from '../../typechain';
+import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './Statistic.scss';
+
 
 function StatisticPage() {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -18,28 +22,43 @@ function StatisticPage() {
   const [totalUsers, setTotalUsers] = useState<number>();
   const [totalCreatedBuggy, setTotalCreatedBuggy] = useState<number>();
   // const [totalFundsInvested,setTotalFundsInvested] = useState<number>()
+  const [nftAddr, setNftAddr] = useState('');
+  const [buggyBalance, setBuggyBalance] = useState(0);
+
+  const navigate = useNavigate();
 
   // const [isError, setIsError] = useState(false);
 
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
 
-  const getContract = async () => {
+  const getContractAndBuggyBalance = async () => {
     if (!connector) return;
     const provider = new ethers.providers.Web3Provider(
       await connector.getProvider(),
     );
     const signer = provider.getSigner();
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
-      '0x607fB2bEc6464Ab3f730eA6fd00807185197D334',
+      CRYPTO_BUGGY_ADDRESS,
       signer,
     );
+    const nftAddr = await cryptoBuggyContract.buggyNFT();
+    console.log('NFT addr: ', nftAddr);
+    setNftAddr(nftAddr);
+
+    if (account) {
+      const buggyTokenAddr = await cryptoBuggyContract.buggyToken();
+      const buggyTokenContract = BuggyToken__factory.connect(buggyTokenAddr, signer);
+      const buggyBalance = await buggyTokenContract.balanceOf(account);
+      console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
+      setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
+    }
 
     return cryptoBuggyContract;
   };
 
   const getTotalUsers = async () => {
-    const cryptoBuggyContract = await getContract();
+    const cryptoBuggyContract = await getContractAndBuggyBalance();
 
     if (!cryptoBuggyContract) return;
     console.log('uniqUsers', await cryptoBuggyContract.buggyNFT());
@@ -51,7 +70,7 @@ function StatisticPage() {
   };
 
   const getBoughtBuggy = async () => {
-    const cryptoBuggyContract = await getContract();
+    const cryptoBuggyContract = await getContractAndBuggyBalance();
 
     if (!cryptoBuggyContract) return;
 
@@ -61,7 +80,7 @@ function StatisticPage() {
   };
 
   const getTotalCreatedBuggy = async () => {
-    const cryptoBuggyContract = await getContract();
+    const cryptoBuggyContract = await getContractAndBuggyBalance();
 
     if (!cryptoBuggyContract) return;
 
@@ -86,7 +105,7 @@ function StatisticPage() {
 
     if (!account) return;
 
-    fetchNFTsForContract('0x151893e0913BE2D12ADcfbF104bF6559027eDBF0');
+    fetchNFTsForContract(nftAddr);
   }, [account]);
 
   const buttonText = () => {
@@ -115,18 +134,18 @@ function StatisticPage() {
       )}
       <div className="statistic__dark-bg">
         <nav className="statistic__nav">
-          <p>Buggy DAO 12.9 DAO</p>
+          <p>Buggy DAO {buggyBalance ? buggyBalance : 0} DAO</p>
           <button className="statistic__nav-center-button">
-            Multipy your donation by x3
+            Multiply your donation by x3
           </button>
           <button
             className="statistic__nav-connect-wallet"
             style={
               user || account
                 ? {
-                    background: '#232622',
-                    color: 'white',
-                  }
+                  background: '#232622',
+                  color: 'white',
+                }
                 : {}
             }
             onClick={() =>
@@ -136,6 +155,12 @@ function StatisticPage() {
             {buttonText()}
           </button>
         </nav>
+        <div
+          onClick={() => navigate('/mint-page')}
+          className='statistic__go-back'>
+          <BsFillArrowLeftSquareFill style={{ fontSize: '28px' }} />
+          <p>Back to Mint Page</p>
+        </div>
         <div className="statistic-header">
           <Audio height="80" width="80" color="#2df30d" ariaLabel="loading" />
           <h1 className="statistic-title">Buggy DAO Statistic</h1>
