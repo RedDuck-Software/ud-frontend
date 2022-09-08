@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 import NFT from '../../components/NFT/NFT';
 import Dropdown from '../../components/Dropdown/Dropdown';
-import { CRYPTO_BUGGY_ADDRESS, NFT_ADDRESS } from '../../helper/constants';
+import { CRYPTO_BUGGY_ADDRESS, } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
@@ -55,9 +55,10 @@ function MintPage() {
       buggyTokenAddr,
       signer,
     );
-    const buggyNFTContract = BuggyNFT__factory.connect(NFT_ADDRESS, signer);
+    const nftAddr = await cryptoBuggyContract.buggyNFT();
+    const buggyNFTContract = BuggyNFT__factory.connect(nftAddr, signer);
 
-    return { cryptoBuggyContract, buggyTokenContract, buggyNFTContract };
+    return { cryptoBuggyContract, buggyTokenContract, buggyNFTContract, nftAddr };
   };
 
   const addFund = async () => {
@@ -125,14 +126,13 @@ function MintPage() {
     const getData = async () => {
       const contracts = await getContract();
       if (!contracts) return;
-      const { cryptoBuggyContract, buggyTokenContract, buggyNFTContract } =
+      const { cryptoBuggyContract, buggyTokenContract, buggyNFTContract, nftAddr } =
         contracts;
       const price = await cryptoBuggyContract.price();
       console.log('Price of 1 buggy: ', Number(price) / Math.pow(10, 18));
       setBuggyPrice(Number(price) / Math.pow(10, 18));
 
       if (!account) return;
-      const nftAddr = await cryptoBuggyContract.buggyNFT();
       const nftsData = await fetchNFTsForContract(nftAddr);
       console.log(nftsData);
 
