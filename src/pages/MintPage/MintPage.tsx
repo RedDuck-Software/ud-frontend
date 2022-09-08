@@ -50,7 +50,7 @@ function MintPage() {
         // @ts-ignore
         value: buggyPrice,
       });
-      await addFundTx.wait();
+      await addFunxTx.wait();
       console.log('Funds sended');
     } catch (e) {
       console.log(e);
@@ -63,7 +63,7 @@ function MintPage() {
     deactivate();
     setUser('');
     setGnosisError(false);
-  };
+  }
 
   useEffect(() => {
     const getBuggyPrice = async () => {
@@ -90,21 +90,22 @@ function MintPage() {
   const buttonText = () => {
     if (user) return user;
     if (account) {
-      const accountFormatted = account?.split("");
-      accountFormatted?.splice(5, 33, "...");
-      return accountFormatted?.slice(0,12);
+      const accountFormatted = account?.split('');
+      accountFormatted?.splice(5, 33, '...');
+      return accountFormatted?.slice(0, 12);
     } else return 'Connect wallet';
   };
 
   return (
     <div className="mint-page__background-photo">
-      {isModalActive &&
+      {isModalActive && (
         <ConnectWallet
           setUser={setUser}
           setIsActive={setIsModalActive}
           setGnosisError={setGnosisError}
           isGnosisError={isGnosisError}
-        />}
+        />
+      )}
       <div className="mint-page__dark-bg">
         <nav className="mint-page__nav">
           <p>Buggy DAO 12.9 DAO</p>
@@ -113,12 +114,18 @@ function MintPage() {
           </button>
           <button
             className="mint-page__nav-connect-wallet"
-            style={user || account ? {
-              background: '#232622',
-              color: 'white',
-            } : {}}
-            onClick={() => account || user
-              ? handleLogout() : setIsModalActive(true)}>
+            style={
+              user || account
+                ? {
+                    background: '#232622',
+                    color: 'white',
+                  }
+                : {}
+            }
+            onClick={() =>
+              account || user ? handleLogout() : setIsModalActive(true)
+            }
+          >
             {buttonText()}
           </button>
         </nav>
