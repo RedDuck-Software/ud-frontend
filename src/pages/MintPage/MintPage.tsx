@@ -6,13 +6,17 @@ import NFT from '../../components/NFT/NFT';
 import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { CryptoBuggy__factory } from '../../typechain';
+import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
 
 function MintPage() {
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [user, setUser] = useState<string>();
+  const [isGnosisError, setGnosisError] = useState(false);
   const [amountToDonate, setAmountToDonate] = useState('0');
   const [buggyPrice, setBuggyPrice] = useState<BigNumber>(BigNumber.from(0));
   const [isError, setIsError] = useState(false);
-  const { account, connector } = useWeb3React();
+  const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
 
   const getContract = async () => {
@@ -37,16 +41,22 @@ function MintPage() {
     try {
       const contract = await getContract();
       if (!contract) return;
-      const addFunxTx = await contract.addFund('test signature', {
+      const addFundTx = await contract.addFund('test signature', 1, {
         value: buggyPrice,
       });
-      await addFunxTx.wait();
+      await addFundTx.wait();
       console.log('Funds sended');
     } catch (e) {
       console.log(e);
     }
 
     setIsError(false);
+  };
+
+  async function handleLogout() {
+    deactivate();
+    setUser('');
+    setGnosisError(false);
   };
 
   useEffect(() => {
@@ -71,16 +81,41 @@ function MintPage() {
     fetchNFTsForContract('0x151893e0913BE2D12ADcfbF104bF6559027eDBF0');
   }, [account]);
 
+  const buttonText = () => {
+    if (user) return user;
+    if (account) {
+      return account.toString().charAt(0) +
+        account.toString().charAt(1) +
+        "..." +
+        account.toString().charAt(account.toString().length - 2) +
+        account.toString().charAt(account.toString().length - 1);
+    } else return 'Connect wallet';
+  };
+
   return (
     <div className="landing__background-photo">
+      {isModalActive &&
+        <ConnectWallet
+          setUser={setUser}
+          setIsActive={setIsModalActive}
+          setGnosisError={setGnosisError}
+          isGnosisError={isGnosisError}
+        />}
       <div className="landing__dark-bg">
         <nav className="landing__nav">
           <p>Buggy DAO 12.9 DAO</p>
           <button className="landing__nav-center-button">
             Multipy your donation by x3
           </button>
-          <button className="landing__nav-connect-wallet">
-            Connect wallet
+          <button
+            className="landing__nav-connect-wallet"
+            style={user || account ? {
+              background: '#232622',
+              color: 'white',
+            } : {}}
+            onClick={() => account || user
+              ? handleLogout() : setIsModalActive(true)}>
+            {buttonText()}
           </button>
         </nav>
         <hr className="green-line" />

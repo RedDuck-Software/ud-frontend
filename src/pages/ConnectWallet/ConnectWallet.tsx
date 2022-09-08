@@ -1,18 +1,21 @@
 import { useWeb3React } from '@web3-react/core';
 import React from 'react';
-import { useState } from 'react';
 import './connectWallet.scss';
 
 import { uauth, gnosisconnect, injected } from '../../helper/connectors';
 
-const ConnectWallet = () => {
-  const { activate, deactivate, account } = useWeb3React();
-  const [user, setUser] = useState<string>();
-  const [isGnosisError, setGnosisError] = useState(false);
+const ConnectWallet = (props: any) => {
+  const {
+    setIsActive,
+    setUser,
+    setGnosisError,
+    isGnosisError } = props;
+  const { activate } = useWeb3React();
 
   async function connectMetamask() {
     try {
       await activate(injected);
+      setIsActive(false);
     } catch (e) {
       console.log(e);
     }
@@ -26,6 +29,7 @@ const ConnectWallet = () => {
       setGnosisError(true);
     } else {
       setGnosisError(false);
+      setIsActive(false);
     }
   };
 
@@ -36,24 +40,25 @@ const ConnectWallet = () => {
     const userObj = JSON.parse(uauth.options.uauth.store.storage.username);
     if (userObj.value) {
       setUser(userObj.value);
+      setIsActive(false);
     }
   };
 
-  async function handleLogout() {
-    deactivate();
-    setUser('');
-    setGnosisError(false);
-  };
-
   return (
-    <div className="container">
-      {user && <span>Connected user: {user}</span>}
-      {account && !user && <span>Connected account: {account}</span>}
-      <button onClick={handleLogin}>Connect via UD</button>
-      <button onClick={connectGnosis}>Connect Gnosis</button>
-      <button onClick={connectMetamask}>Connect Metamask</button>
-      <button onClick={handleLogout}>Disconnect wallet</button>
-      {isGnosisError && <span>The app is loaded outside safe context</span>}
+    <div
+      className="modal"
+      onClick={() => setIsActive(false)}>
+      <div
+        className='modal__content'
+        onClick={e => e.stopPropagation()}
+      >
+        <div className='modal__content-buttons-wrapper'>
+          <button onClick={handleLogin}>Connect Unstoppable Domains</button>
+          <button onClick={connectGnosis}>Connect Gnosis</button>
+          <button onClick={connectMetamask}>Connect Metamask</button>
+          {isGnosisError && <span>The app is loaded outside safe context</span>}
+        </div>
+      </div >
     </div>
   );
 };
