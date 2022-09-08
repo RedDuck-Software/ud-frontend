@@ -13,6 +13,13 @@
   }
 }
 
+.disabled {
+
+  &:hover {
+    cursor: not-allowed;
+  }
+}
+
 .arrow {
   border: solid #2fe212;
   border-width: 0 3px 3px 0;
