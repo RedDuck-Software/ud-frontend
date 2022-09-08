@@ -8,12 +8,17 @@ import type {
   BytesLike,
   CallOverrides,
   ContractTransaction,
+  Overrides,
   PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -26,13 +31,37 @@ import type {
 export interface CryptoBuggyInterface extends utils.Interface {
   functions: {
     "addFund(string,uint256)": FunctionFragment;
+    "addFundPartially(string)": FunctionFragment;
+    "boughtBuggy()": FunctionFragment;
+    "buggyNFT()": FunctionFragment;
     "buggyToken()": FunctionFragment;
-    "nft()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "partialBuggyNFT()": FunctionFragment;
     "price()": FunctionFragment;
+    "raised()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "uniqUsers()": FunctionFragment;
+    "users(address)": FunctionFragment;
+    "withdraw(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "addFund" | "buggyToken" | "nft" | "price"
+    nameOrSignatureOrTopic:
+      | "addFund"
+      | "addFundPartially"
+      | "boughtBuggy"
+      | "buggyNFT"
+      | "buggyToken"
+      | "owner"
+      | "partialBuggyNFT"
+      | "price"
+      | "raised"
+      | "renounceOwnership"
+      | "transferOwnership"
+      | "uniqUsers"
+      | "users"
+      | "withdraw"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -40,19 +69,91 @@ export interface CryptoBuggyInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "addFundPartially",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "boughtBuggy",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "buggyNFT", values?: undefined): string;
+  encodeFunctionData(
     functionFragment: "buggyToken",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "nft", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "partialBuggyNFT",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "price", values?: undefined): string;
+  encodeFunctionData(functionFragment: "raised", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(functionFragment: "uniqUsers", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "users",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdraw",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "addFund", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "addFundPartially",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "boughtBuggy",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "buggyNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buggyToken", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "partialBuggyNFT",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "raised", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "uniqUsers", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "users", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface CryptoBuggy extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -87,11 +188,45 @@ export interface CryptoBuggy extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    addFundPartially(
+      _signature: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    boughtBuggy(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    buggyNFT(overrides?: CallOverrides): Promise<[string]>;
+
     buggyToken(overrides?: CallOverrides): Promise<[string]>;
 
-    nft(overrides?: CallOverrides): Promise<[string]>;
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    partialBuggyNFT(overrides?: CallOverrides): Promise<[string]>;
 
     price(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    raised(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    uniqUsers(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    users(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    withdraw(
+      _beneficiary: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   addFund(
@@ -100,11 +235,45 @@ export interface CryptoBuggy extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  addFundPartially(
+    _signature: PromiseOrValue<string>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  boughtBuggy(overrides?: CallOverrides): Promise<BigNumber>;
+
+  buggyNFT(overrides?: CallOverrides): Promise<string>;
+
   buggyToken(overrides?: CallOverrides): Promise<string>;
 
-  nft(overrides?: CallOverrides): Promise<string>;
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  partialBuggyNFT(overrides?: CallOverrides): Promise<string>;
 
   price(overrides?: CallOverrides): Promise<BigNumber>;
+
+  raised(overrides?: CallOverrides): Promise<BigNumber>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  uniqUsers(overrides?: CallOverrides): Promise<BigNumber>;
+
+  users(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  withdraw(
+    _beneficiary: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     addFund(
@@ -113,14 +282,55 @@ export interface CryptoBuggy extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    addFundPartially(
+      _signature: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    boughtBuggy(overrides?: CallOverrides): Promise<BigNumber>;
+
+    buggyNFT(overrides?: CallOverrides): Promise<string>;
+
     buggyToken(overrides?: CallOverrides): Promise<string>;
 
-    nft(overrides?: CallOverrides): Promise<string>;
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    partialBuggyNFT(overrides?: CallOverrides): Promise<string>;
 
     price(overrides?: CallOverrides): Promise<BigNumber>;
+
+    raised(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    uniqUsers(overrides?: CallOverrides): Promise<BigNumber>;
+
+    users(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    withdraw(
+      _beneficiary: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+  };
 
   estimateGas: {
     addFund(
@@ -129,11 +339,45 @@ export interface CryptoBuggy extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    addFundPartially(
+      _signature: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    boughtBuggy(overrides?: CallOverrides): Promise<BigNumber>;
+
+    buggyNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
     buggyToken(overrides?: CallOverrides): Promise<BigNumber>;
 
-    nft(overrides?: CallOverrides): Promise<BigNumber>;
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    partialBuggyNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
     price(overrides?: CallOverrides): Promise<BigNumber>;
+
+    raised(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    uniqUsers(overrides?: CallOverrides): Promise<BigNumber>;
+
+    users(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    withdraw(
+      _beneficiary: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -143,10 +387,44 @@ export interface CryptoBuggy extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    addFundPartially(
+      _signature: PromiseOrValue<string>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    boughtBuggy(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    buggyNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     buggyToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    nft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    partialBuggyNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    raised(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    uniqUsers(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    users(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    withdraw(
+      _beneficiary: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }
