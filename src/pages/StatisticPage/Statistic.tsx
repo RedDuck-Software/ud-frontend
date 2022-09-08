@@ -1,7 +1,8 @@
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { Audio } from 'react-loader-spinner';
+import { Audio } from 'react-loader-spinner'
+import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { CryptoBuggy__factory } from '../../typechain';
@@ -18,6 +19,7 @@ function StatisticPage() {
   const [totalUsers, setTotalUsers] = useState<number>();
   const [totalCreatedBuggy, setTotalCreatedBuggy] = useState<number>();
   // const [totalFundsInvested,setTotalFundsInvested] = useState<number>()
+  const [nftAddr, setNftAddr] = useState('');
 
   // const [isError, setIsError] = useState(false);
 
@@ -31,9 +33,12 @@ function StatisticPage() {
     );
     const signer = provider.getSigner();
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
-      '0x607fB2bEc6464Ab3f730eA6fd00807185197D334',
+      CRYPTO_BUGGY_ADDRESS,
       signer,
     );
+    const nftAddr = await cryptoBuggyContract.buggyNFT();
+    console.log('NFT addr: ', nftAddr);
+    setNftAddr(nftAddr);
 
     return cryptoBuggyContract;
   };
@@ -86,7 +91,7 @@ function StatisticPage() {
 
     if (!account) return;
 
-    fetchNFTsForContract('0x151893e0913BE2D12ADcfbF104bF6559027eDBF0');
+    fetchNFTsForContract(nftAddr);
   }, [account]);
 
   const buttonText = () => {
@@ -124,9 +129,9 @@ function StatisticPage() {
             style={
               user || account
                 ? {
-                    background: '#232622',
-                    color: 'white',
-                  }
+                  background: '#232622',
+                  color: 'white',
+                }
                 : {}
             }
             onClick={() =>
