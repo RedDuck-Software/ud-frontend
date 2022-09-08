@@ -7,7 +7,7 @@ import NFT from '../../components/NFT/NFT';
 import Dropdown from '../../components/Dropdown/Dropdown';
 import { CRYPTO_BUGGY_ADDRESS, } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
-import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
+import { BuggyNFT, BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
 import { useNavigate } from 'react-router-dom';
@@ -85,6 +85,7 @@ function MintPage() {
       );
       setIsLoading(true);
       await addFundTx.wait();
+      await fetchNFTsAggregate(contracts.buggyNFTContract, contracts.buggyNFTContract.address);
       setIsLoading(false);
       setIsTxDone(true);
       console.log('Funds sended');
@@ -115,6 +116,7 @@ function MintPage() {
       });
       setIsLoading(true);
       await addFundTx.wait();
+      await fetchNFTsAggregate(contracts.buggyNFTContract, contracts.buggyNFTContract.address);
       setIsLoading(false);
       setIsTxDone(true);
       console.log('Funds sended');
@@ -133,6 +135,23 @@ function MintPage() {
     setGnosisError(false);
   }
 
+  async function fetchNFTsAggregate(buggyNFTContract:BuggyNFT, nftAddr:string) {
+    
+    const nftsData = await fetchNFTsForContract(nftAddr);
+    console.log(nftsData);
+    
+    if (nftsData && nftsData.length) {
+      const nftsImages = await Promise.all(
+        nftsData.map(async (item) => {
+          const image = await buggyNFTContract.getImage(item.token_id);
+          return { id: item.token_id, image };
+        }),
+      );
+
+      setNFTsImages(nftsImages);
+    }
+  }
+
   useEffect(() => {
     const getData = async () => {
       const contracts = await getContract();
@@ -144,27 +163,20 @@ function MintPage() {
       setBuggyPrice(Number(price) / Math.pow(10, 18));
 
       if (!account) return;
-      const nftsData = await fetchNFTsForContract(nftAddr);
-      console.log(nftsData);
-
+      
       const buggyBalance = await buggyTokenContract.balanceOf(account);
       console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
       setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
+      
+      await fetchNFTsAggregate(buggyNFTContract, nftAddr);
 
-      if (nftsData && nftsData.length) {
-        const nftsImages = await Promise.all(
-          nftsData.map(async (item) => {
-            const image = await buggyNFTContract.getImage(item.token_id);
-            return { id: item.token_id, image };
-          }),
-        );
+      const nftsData = await fetchNFTsForContract(nftAddr);
+      console.log(nftsData);
 
-        setNFTsImages(nftsImages);
-      }
       setIsTxDone(false);
     };
 
-    getData();
+      getData();
   }, [account, isTxDone]);
 
   const buttonText = () => {
