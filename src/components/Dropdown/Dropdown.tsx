@@ -15,8 +15,7 @@ const Dropdown = ({ setSelectedOption }: { setSelectedOption: Function }) => {
       </div>
       {isOpen && (
         <button
-          disabled={true}
-          className="select-option disabled"
+          className="select-option"
           onClick={() => {
             const temp = selected;
             setSelected(secondOption);

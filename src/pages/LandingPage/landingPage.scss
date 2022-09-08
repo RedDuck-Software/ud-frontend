@@ -89,6 +89,7 @@
     .aim {
       display: block;
       margin-left: auto;
+      max-width: 285px;
     }
 
     &-text {
@@ -97,6 +98,7 @@
 
     &-img {
       max-width: 440px;
+      height: 100%;
     }
   }
 
