@@ -12,6 +12,7 @@ import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
 import { useNavigate } from 'react-router-dom';
 import { BuggyNFT__factory } from '../../typechain/factories/BuggyNFT__factory';
+import ModalWindow from '../../components/ModalWindow/ModalWindow';
 
 interface INftObjs {
   id: string;
@@ -33,6 +34,7 @@ function MintPage() {
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
   const [nftsImages, setNFTsImages] = useState<INftObjs[]>();
+  const [isModalShown, setIsModalShown] = useState(false);
 
   const navigate = useNavigate();
 
@@ -81,8 +83,12 @@ function MintPage() {
       await addFundTx.wait();
       setIsTxDone(true);
       console.log('Funds sended');
+      setIsModalShown(true);
     } catch (e) {
+      setIsError(true);
+      setIsModalShown(true);
       console.log(e);
+      return;
     }
 
     setIsError(false);
@@ -168,6 +174,9 @@ function MintPage() {
           setGnosisError={setGnosisError}
           isGnosisError={isGnosisError}
         />
+      )}
+      {isModalShown && (
+        <ModalWindow setIsShown={setIsModalShown} isError={isError} />
       )}
       <div className="mint-page__dark-bg">
         <nav className="mint-page__nav">
