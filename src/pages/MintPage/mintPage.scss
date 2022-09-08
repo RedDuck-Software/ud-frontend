@@ -10,7 +10,6 @@
   max-width: 200px;
   gap: 10px;
 }
-
 .mint-page {
   &__nav {
     display: flex;
@@ -232,6 +231,11 @@
     margin: 0 auto;
     margin-top: 50px;
     margin-bottom: 100px;
+    cursor: pointer;
+
+  }
+  &__donate-btn:hover {
+    background: #16a800;
   }
 }
 

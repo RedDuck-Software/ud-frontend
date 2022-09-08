@@ -17,7 +17,7 @@ function StatisticPage() {
   const [totalBoughtBuggy,setTotalBoughtBugg] = useState<number>()
   const [totalUsers,setTotalUsers] = useState<number>()
   const [totalCreatedBuggy,setTotalCreatedBuggy] = useState<number>()
-  const [totalFundsInvested,setTotalFundsInvested] = useState<number>()
+  // const [totalFundsInvested,setTotalFundsInvested] = useState<number>()
 
 
   // const [isError, setIsError] = useState(false);
@@ -49,7 +49,7 @@ function StatisticPage() {
     const uniqUsers = await cryptoBuggyContract.uniqUsers()
     setTotalUsers(uniqUsers.toNumber())
     
-    console.log('boughtBuggy',uniqUsers);
+    console.log('boughtBuggy',uniqUsers.toNumber());
   };
 
   const getBoughtBuggy = async () => {
@@ -59,7 +59,7 @@ function StatisticPage() {
 
     const boughtBuggy = await cryptoBuggyContract.boughtBuggy()
     setTotalBoughtBugg(boughtBuggy.toNumber())
-    console.log('boughtBuggy',boughtBuggy);
+    console.log('boughtBuggy',boughtBuggy.toNumber());
   };
 
   const getTotalCreatedBuggy = async () => {
@@ -69,22 +69,22 @@ function StatisticPage() {
 
     const totalCreatedBuggy = await cryptoBuggyContract.boughtBuggy()
     setTotalCreatedBuggy(totalCreatedBuggy.toNumber())
-    console.log('totalCreatedBuggy',totalCreatedBuggy);
+    console.log('totalCreatedBuggy',totalCreatedBuggy.toNumber());
   };
 
-  const getTotalDonatedFunds = async () => {
-      if(totalBoughtBuggy == undefined || totalBoughtBuggy == null) return;
+  // const getTotalDonatedFunds = async () => {
+  //     if(totalBoughtBuggy == undefined || totalBoughtBuggy == null) return;
 
-      const res = totalBoughtBuggy * 1500
-      setTotalFundsInvested(res);
-      console.log('res',res);
-    };
+  //     const res = totalBoughtBuggy * 1500
+  //     setTotalFundsInvested(res);
+  //     console.log('res',res);
+  //   };
 
   useEffect(() => {
     getTotalUsers()
     getBoughtBuggy()
     getTotalCreatedBuggy()
-    getTotalDonatedFunds()
+    // getTotalDonatedFunds()
 
     if (!account) return;
   
@@ -156,20 +156,19 @@ function StatisticPage() {
         <div className='statistic'>
             <div>
               <h2>Total users</h2>
-              <div className='statistic-cirle'>{totalUsers?totalUsers: 24}</div>
-
+              <div className='statistic-cirle'>{totalUsers?totalUsers: '...'}</div>
             </div>
             <div >
               <h2>Total bought buggy</h2>
-              <div className='statistic-cirle'>{totalBoughtBuggy?totalBoughtBuggy:522}</div>
+              <div className='statistic-cirle'>{totalBoughtBuggy?totalBoughtBuggy:'...'}</div>
             </div>
             <div >
               <h2>Total created buggy</h2>
-              <div className='statistic-cirle'>{totalCreatedBuggy?totalCreatedBuggy:12314}</div>
+              <div className='statistic-cirle'>{totalCreatedBuggy?totalCreatedBuggy:'...'}</div>
             </div>
             <div>
              <h2>Total donated funds(MATIC)</h2>
-             <div className='statistic-cirle'>{totalFundsInvested?totalFundsInvested:15555} </div>
+             <div className='statistic-cirle'>{totalBoughtBuggy?totalBoughtBuggy * 1500:'...'} </div>
 
             </div>
         </div>
