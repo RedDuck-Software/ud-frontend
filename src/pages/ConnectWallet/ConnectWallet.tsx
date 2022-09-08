@@ -4,6 +4,7 @@ import './connectWallet.scss';
 
 import { uauth, gnosisconnect, injected } from '../../helper/connectors';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ConnectWallet = (props: any) => {
   const {
     setIsActive,
