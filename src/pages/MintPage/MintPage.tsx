@@ -7,17 +7,19 @@ import React, { useEffect, useState } from 'react';
 import Dropdown from '../../components/Dropdown/Dropdown';
 import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
-import { CryptoBuggy__factory } from '../../typechain';
+import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
 
 function MintPage() {
   const [isModalActive, setIsModalActive] = useState(false);
-
+  const [signature, setSignature] = useState('');
+  const [buggyBalance, setBuggyBalance] = useState(0);
+  const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [user, setUser] = useState<string>();
   const [isGnosisError, setGnosisError] = useState(false);
   const [amountToDonate, setAmountToDonate] = useState('0');
-  const [buggyPrice, setBuggyPrice] = useState<BigNumber>(BigNumber.from(0));
+  const [buggyPrice, setBuggyPrice] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string>('Full');
   const [isError, setIsError] = useState(false);
   const { account, connector, deactivate } = useWeb3React();
@@ -33,24 +35,33 @@ function MintPage() {
       CRYPTO_BUGGY_ADDRESS,
       signer,
     );
+    const nativeTokenBalance = await signer.getBalance();
+    setNativeTokenBalance(Number(nativeTokenBalance) / Math.pow(10, 18));
+    const buggyTokenAddr = await cryptoBuggyContract.buggyToken();
+    const buggyTokenContract = BuggyToken__factory.connect(buggyTokenAddr, signer);
 
-    return cryptoBuggyContract;
+    return { cryptoBuggyContract, buggyTokenContract };
   };
 
   const addFund = async () => {
-    if (+amountToDonate <= 0 || +amountToDonate >= 2000) {
+    if (+amountToDonate <= 0) {
       setIsError(true);
       return;
     }
     try {
-      const contract = await getContract();
-      if (!contract) return;
-      const addFunxTx = await contract.addFund('test signature', {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        value: buggyPrice,
+      const contracts = await getContract();
+      if (!contracts) return;
+      const { cryptoBuggyContract } = contracts;
+      const numberOfBuggys = Number(amountToDonate) / Number(buggyPrice);
+      console.log('Number of buggys to buy: ', numberOfBuggys);
+      console.log('Signature: ', signature);
+      console.log('Amount to spend: ', amountToDonate);
+      const addFundTx = await cryptoBuggyContract.addFund(
+        signature,
+        BigNumber.from(numberOfBuggys), {
+        value: ethers.utils.parseUnits(amountToDonate),
       });
-      await addFunxTx.wait();
+      await addFundTx.wait();
       console.log('Funds sended');
     } catch (e) {
       console.log(e);
@@ -66,25 +77,23 @@ function MintPage() {
   }
 
   useEffect(() => {
-    const getBuggyPrice = async () => {
-      const contract = await getContract();
-      if (!contract) return;
-      const result = await contract.price();
-      return result;
+    const getData = async () => {
+      const contracts = await getContract();
+      if (!contracts) return;
+      const { cryptoBuggyContract, buggyTokenContract } = contracts;
+      const price = await cryptoBuggyContract.price();
+      console.log('Price of 1 buggy: ', Number(price) / Math.pow(10, 18));
+      setBuggyPrice(Number(price) / Math.pow(10, 18));
+
+      if (!account) return;
+      const nftAddr = await cryptoBuggyContract.buggyNFT();
+      fetchNFTsForContract(nftAddr);
+
+      const buggyBalance = buggyTokenContract.balanceOf(account);
+      console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
+      setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
     };
-    getBuggyPrice().then((res) => {
-      console.log(
-        'Price of 1 buggy: ',
-        res && ethers.utils.formatUnits(res.toString()),
-      );
-      res && setBuggyPrice(res);
-    });
-  }, [account]);
-
-  useEffect(() => {
-    if (!account) return;
-
-    fetchNFTsForContract('0x151893e0913BE2D12ADcfbF104bF6559027eDBF0');
+    getData();
   }, [account]);
 
   const buttonText = () => {
@@ -108,7 +117,7 @@ function MintPage() {
       )}
       <div className="mint-page__dark-bg">
         <nav className="mint-page__nav">
-          <p>Buggy DAO 12.9 DAO</p>
+          <p>Buggy DAO {buggyBalance ? buggyBalance.toFixed(2) : 0} DAO</p>
           <button className="mint-page__nav-center-button">
             Multipy your donation by x3
           </button>
@@ -117,9 +126,9 @@ function MintPage() {
             style={
               user || account
                 ? {
-                    background: '#232622',
-                    color: 'white',
-                  }
+                  background: '#232622',
+                  color: 'white',
+                }
                 : {}
             }
             onClick={() =>
@@ -143,8 +152,8 @@ function MintPage() {
               className="mint-page__balances-currency-amount"
             >
               <div className="mint-page__balances-text-wrapper">
-                <p>Ethereum</p>
-                <p>0.09 ETH</p>
+                <p>MATIC</p>
+                <p>{nativeTokenBalance} MATIC</p>
               </div>
             </div>
           </div>
@@ -154,7 +163,8 @@ function MintPage() {
           <div className="mint-page__input-wrapper">
             <div className="mint-page__select">
               <span className="input-text">Mode</span>
-              <Dropdown setSelectedOption={setSelectedOption} />
+              <Dropdown
+                setSelectedOption={setSelectedOption} />
             </div>
             <div className="mint-page__input">
               <span className="input-text">Amount</span>
@@ -162,11 +172,11 @@ function MintPage() {
                 placeholder="Amount to donate..."
                 type="number"
                 min="0"
-                max="2000"
+                step={selectedOption === "Full" ? buggyPrice : "1"}
                 value={amountToDonate}
                 onChange={(event) => setAmountToDonate(event.target.value)}
               />
-              <span className="buggy-amount">1B = 2000$</span>
+              <span className="buggy-amount">1B = {buggyPrice} MATIC</span>
               {isError && (
                 <span className="amount-error">
                   Amount in input is not correct
@@ -183,15 +193,14 @@ function MintPage() {
               rows={5}
               cols={50}
               maxLength={100}
+              value={signature}
+              onChange={e => setSignature(e.target.value)}
             ></textarea>
           </div>
         </div>
         <button className="mint-page__donate-btn" onClick={() => addFund()}>
           Donate
         </button>
-        {/* <p>
-          Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}
-        </p> */}
       </div>
     </div>
   );

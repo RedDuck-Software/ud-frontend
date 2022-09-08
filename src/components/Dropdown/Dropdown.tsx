@@ -14,8 +14,9 @@ const Dropdown = ({ setSelectedOption }: { setSelectedOption: Function }) => {
         {selected} <i className="arrow down"></i>
       </div>
       {isOpen && (
-        <div
-          className="select-option"
+        <button
+          disabled={true}
+          className="select-option disabled"
           onClick={() => {
             const temp = selected;
             setSelected(secondOption);
@@ -25,7 +26,7 @@ const Dropdown = ({ setSelectedOption }: { setSelectedOption: Function }) => {
           }}
         >
           {secondOption}
-        </div>
+        </button>
       )}
     </div>
   );
