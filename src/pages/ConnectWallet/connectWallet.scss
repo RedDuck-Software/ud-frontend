@@ -1,6 +1,57 @@
-.container {
+@import '../../index.scss';
+
+span {
+  color: white;
+  text-align: center;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
-  flex-direction: column;
-  max-width: 120px;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+
+  &__content {
+    width: 500px;
+    height: 425px;
+    border: 1px solid #2FE212;
+    border-radius: 0px 60px;
+    background-color: rgb(21, 21, 21, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-buttons-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 65%;
+      height: 55%;
+
+      button {
+        width: 100%;
+        height: 50px;
+        cursor: pointer;
+        border: 1px solid #2FE212;
+        border-radius: 15px;
+        background: none;
+        color: white;
+        font-family: $fontFamily;
+        text-transform: uppercase;
+        font-size: 15px;
+
+        &:hover {
+          background-color: black;
+        }
+      }
+    }
+
+  }
 }
