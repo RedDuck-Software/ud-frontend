@@ -59,7 +59,7 @@ function MintPage() {
       const addFundTx = await cryptoBuggyContract.addFund(
         signature,
         BigNumber.from(numberOfBuggys), {
-        value: BigNumber.from(amountToDonate),
+        value: ethers.utils.parseUnits(amountToDonate),
       });
       await addFundTx.wait();
       console.log('Funds sended');
@@ -93,6 +93,7 @@ function MintPage() {
       console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
       setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
     };
+    getData();
   }, [account]);
 
   const buttonText = () => {
