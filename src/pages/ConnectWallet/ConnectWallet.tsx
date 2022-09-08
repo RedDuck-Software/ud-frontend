@@ -52,6 +52,7 @@ const ConnectWallet = (props: any) => {
         className='modal__content'
         onClick={e => e.stopPropagation()}
       >
+
         <div className='modal__content-buttons-wrapper'>
           <button onClick={handleLogin}>Connect Unstoppable Domains</button>
           <button onClick={connectGnosis}>Connect Gnosis</button>
