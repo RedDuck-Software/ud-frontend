@@ -122,7 +122,7 @@ function StatisticPage() {
         <nav className="statistic__nav">
           <p>Buggy DAO 12.9 DAO</p>
           <button className="statistic__nav-center-button">
-            Multipy your donation by x3
+            Multiply your donation by x3
           </button>
           <button
             className="statistic__nav-connect-wallet"

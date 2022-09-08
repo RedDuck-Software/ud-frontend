@@ -182,7 +182,7 @@ function MintPage() {
         <nav className="mint-page__nav">
           <p>Buggy DAO {buggyBalance ? buggyBalance.toFixed(2) : 0} DAO</p>
           <button className="mint-page__nav-center-button">
-            Multipy your donation by x3
+            Multiply your donation by x3
           </button>
           <button
             className="mint-page__nav-connect-wallet"

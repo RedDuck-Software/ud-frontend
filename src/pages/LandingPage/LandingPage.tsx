@@ -15,7 +15,7 @@ const LandingPage = () => {
   return (
     <div className="landing__wrapper">
       <button className="landing__top-button">
-        Multipy your donation by x3
+        Multiply your donation by x3
       </button>
       <div className="landing__background-photo">
         <div className="landing__dark-bg">
