@@ -116,9 +116,14 @@ function MintPage() {
       setIsLoading(true);
       await addFundTx.wait();
       setIsLoading(false);
+      setIsTxDone(true);
       console.log('Funds sended');
+      setIsModalShown(true);
     } catch (e) {
+      setIsError(true);
+      setIsModalShown(true);
       console.log(e);
+      return;
     }
   };
 
