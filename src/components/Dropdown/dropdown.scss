@@ -7,9 +7,16 @@
     letter-spacing: 0.035em;
     color: #ffffff;
     font-size: 20px;
-    padding: 10px 25px;
+    padding: 5px 25px;
     cursor: pointer;
     position: relative;
+  }
+}
+
+.disabled {
+
+  &:hover {
+    cursor: not-allowed;
   }
 }
 
@@ -20,6 +27,7 @@
   padding: 3px;
   position: absolute;
   right: 30px;
+  top: 10px;
 }
 
 .right {

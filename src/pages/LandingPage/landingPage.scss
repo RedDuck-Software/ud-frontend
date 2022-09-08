@@ -1,13 +1,24 @@
 @import '../../index.scss';
 
+* {
+  font-family: $fontFamily;
+  color: #f8f1f1;
+  font-size: 20px;
+  line-height: 30px;
+}
+
 .landing {
   &__background-photo {
-    background: no-repeat center/140% url('../../images/background.png');
-    background-attachment: fixed;
+    background: no-repeat top/100% url('../../images/sssssss.jpg');
   }
 
   &__dark-bg {
     background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  &__fully-dark-bg {
+    background: #100c08;
+    padding-bottom: 80px;
   }
 
   &__top-button {
@@ -26,6 +37,82 @@
 
     &:hover {
       background-color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  &__take-my-money {
+    margin-top: -8px;
+    position: relative;
+
+    .green-line {
+      position: absolute;
+      top: 50px;
+      width: 100%;
+    }
+
+    &-wrapper {
+      display: flex;
+      gap: 100px;
+      padding-top: 150px;
+      margin-bottom: 100px;
+
+      .take-my-money-img {
+        position: relative;
+      }
+
+      .take-my-money-bg {
+        position: absolute;
+        width: 300px;
+        height: 380px;
+        opacity: 0.2;
+        border: 1px solid #2df30d;
+        border-radius: 40px 0px;
+      }
+    }
+  }
+
+  &__text-1 {
+    display: flex;
+    padding: 50px 0;
+    gap: 100px;
+
+    &-img {
+      max-width: 440px;
+    }
+  }
+
+  &__text-2 {
+    display: flex;
+    padding: 50px 0;
+    gap: 100px;
+
+    .aim {
+      display: block;
+      margin-left: auto;
+    }
+
+    &-text {
+      padding-top: 70px;
+    }
+
+    &-img {
+      max-width: 440px;
+    }
+  }
+
+  &__text-3 {
+    display: flex;
+    padding: 50px 0;
+    gap: 100px;
+
+    &-text {
+      display: flex;
+      align-items: center;
+      height: 85%;
+    }
+
+    &-img {
+      max-width: 440px;
     }
   }
 
@@ -55,16 +142,20 @@
     }
   }
 
-  &__text-wrapper {
-    background-color: rgba(9, 65, 0, 0.5);
-  }
+  // &__text-wrapper {
+  //   background-color: rgba(9, 65, 0, 0.5);
+  // }
 
   &__text {
     font-family: $fontFamily;
     color: #f8f1f1;
     font-size: 20px;
     line-height: 30px;
-    padding: 30px 170px;
+    padding: 20px 0px;
+
+    &-note {
+      color: #2df30d;
+    }
   }
 
   &__images-wrapper {
@@ -72,7 +163,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    margin-bottom: 150px;
+    margin-bottom: 350px;
 
     &-bg {
       position: absolute;
@@ -97,5 +188,4 @@
   opacity: 0.2;
   border: 1px solid #2fe212;
   margin-top: -120px;
-  padding-bottom: 130px;
 }

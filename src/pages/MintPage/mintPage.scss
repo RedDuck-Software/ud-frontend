@@ -189,6 +189,7 @@
     gap: 5px;
     align-items: flex-start;
   }
+
   &__input {
     input {
       width: 300px;
@@ -232,7 +233,6 @@
     margin-top: 50px;
     margin-bottom: 100px;
     cursor: pointer;
-
   }
   &__donate-btn:hover {
     background: #16a800;
