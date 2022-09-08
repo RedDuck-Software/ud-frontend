@@ -33,7 +33,6 @@ const App: FC = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/mint-page" element={<MintPage />} />
-          <Route path="/connect-wallet" element={<ConnectWallet />} />
         </Routes>
       </Web3ReactProvider>
     </>
