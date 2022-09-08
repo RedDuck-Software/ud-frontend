@@ -1,0 +1,43 @@
+.select-wrapper {
+  .select-option {
+    width: 300px;
+    height: 40px;
+    border: 1px solid #2fe212;
+    border-radius: 40px 0px;
+    letter-spacing: 0.035em;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    position: relative;
+  }
+}
+
+.arrow {
+  border: solid #2fe212;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  position: absolute;
+  right: 30px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
