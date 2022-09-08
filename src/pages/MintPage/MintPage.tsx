@@ -70,6 +70,27 @@ function MintPage() {
     setIsError(false);
   };
 
+  const addFundPartially = async () => {
+    if (+amountToDonate <= 0) {
+      setIsError(true);
+      return;
+    }
+    try {
+      const contracts = await getContract();
+      if (!contracts) return;
+      const { cryptoBuggyContract } = contracts;
+      console.log('Amount to spend: ', amountToDonate);
+      const addFundTx = await cryptoBuggyContract.addFundPartially(
+        signature, {
+        value: ethers.utils.parseUnits(amountToDonate)
+      });
+      await addFundTx.wait();
+      console.log('Funds sended');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   async function handleLogout() {
     deactivate();
     setUser('');
@@ -172,7 +193,13 @@ function MintPage() {
                 placeholder="Amount to donate..."
                 type="number"
                 min="0"
-                step={selectedOption === "Full" ? buggyPrice : "1"}
+                step={
+                  buggyPrice
+                    ?
+                    selectedOption === "Full" ? buggyPrice : buggyPrice / 2
+                    :
+                    1
+                }
                 value={amountToDonate}
                 onChange={(event) => setAmountToDonate(event.target.value)}
               />
@@ -198,7 +225,9 @@ function MintPage() {
             ></textarea>
           </div>
         </div>
-        <button className="mint-page__donate-btn" onClick={() => addFund()}>
+        <button
+          className="mint-page__donate-btn"
+          onClick={() => selectedOption === "Full" ? addFund() : addFundPartially()}>
           Donate
         </button>
       </div>
