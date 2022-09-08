@@ -7,7 +7,6 @@ import { Web3ReactProvider } from '@web3-react/core';
 import React, { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import ConnectWallet from './pages/ConnectWallet/ConnectWallet';
 import LandingPage from './pages/LandingPage/LandingPage';
 import MintPage from './pages/MintPage/MintPage';
 
