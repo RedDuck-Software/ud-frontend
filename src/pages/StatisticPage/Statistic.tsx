@@ -134,7 +134,7 @@ function StatisticPage() {
       )}
       <div className="statistic__dark-bg">
         <nav className="statistic__nav">
-          <p>Buggy DAO {buggyBalance} DAO</p>
+          <p>Buggy DAO {buggyBalance? buggyBalance : 0} DAO</p>
           <button className="statistic__nav-center-button">
             Multiply your donation by x3
           </button>
