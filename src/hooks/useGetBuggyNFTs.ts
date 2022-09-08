@@ -14,7 +14,7 @@ export const useGetBuggyNFTs = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const rinkebyNFTs = await Web3Api.account.getNFTsForContract(options);
-    console.log(rinkebyNFTs);
+    return rinkebyNFTs.result;
   };
 
   return { fetchNFTsForContract };

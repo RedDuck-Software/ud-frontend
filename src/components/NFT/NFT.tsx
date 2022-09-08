@@ -1,10 +1,18 @@
 import './NFT.scss';
 import React from 'react';
 
-function NFT() {
+function NFT({ image }: { image: string }) {
+  console.log(image);
+
   return (
     <div className="nft__container">
-      <div className="nft__container-img"></div>
+      <div className="nft__container-img">
+        <img
+          className="nft__image"
+          src={image && `https://ipfs.io/ipfs/${image}`}
+          alt=""
+        />
+      </div>
     </div>
   );
 }
