@@ -116,9 +116,14 @@ function MintPage() {
       setIsLoading(true);
       await addFundTx.wait();
       setIsLoading(false);
+      setIsTxDone(true);
       console.log('Funds sended');
+      setIsModalShown(true);
     } catch (e) {
+      setIsError(true);
+      setIsModalShown(true);
       console.log(e);
+      return;
     }
   };
 
@@ -143,7 +148,6 @@ function MintPage() {
       console.log(nftsData);
 
       const buggyBalance = await buggyTokenContract.balanceOf(account);
-      console.log('Buggy balance: ', buggyBalance);
       console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
       setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
 

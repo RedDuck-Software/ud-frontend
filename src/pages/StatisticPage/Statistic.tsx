@@ -20,13 +20,14 @@ function StatisticPage() {
   const [totalCreatedBuggy, setTotalCreatedBuggy] = useState<number>();
   const [buggyBalance, setBuggyBalance] = useState(0);
   const [nftAddr, setNftAddr] = useState('');
+  const [buggyBalance, setBuggyBalance] = useState(0);
 
   // const [isError, setIsError] = useState(false);
 
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
 
-  const getContract = async () => {
+  const getContractAndBuggyBalance = async () => {
     if (!connector) return;
     const provider = new ethers.providers.Web3Provider(
       await connector.getProvider(),
@@ -40,11 +41,19 @@ function StatisticPage() {
     console.log('NFT addr: ', nftAddr);
     setNftAddr(nftAddr);
 
+    if (account) {
+      const buggyTokenAddr = await cryptoBuggyContract.buggyToken();
+      const buggyTokenContract = BuggyToken__factory.connect(buggyTokenAddr, signer);
+      const buggyBalance = await buggyTokenContract.balanceOf(account);
+      console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
+      setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
+    }
+
     return cryptoBuggyContract;
   };
 
   const getTotalUsers = async () => {
-    const cryptoBuggyContract = await getContract();
+    const cryptoBuggyContract = await getContractAndBuggyBalance();
 
     if (!cryptoBuggyContract) return;
     console.log('uniqUsers', await cryptoBuggyContract.buggyNFT());
@@ -56,7 +65,7 @@ function StatisticPage() {
   };
 
   const getBoughtBuggy = async () => {
-    const cryptoBuggyContract = await getContract();
+    const cryptoBuggyContract = await getContractAndBuggyBalance();
 
     if (!cryptoBuggyContract) return;
 
@@ -66,7 +75,7 @@ function StatisticPage() {
   };
 
   const getTotalCreatedBuggy = async () => {
-    const cryptoBuggyContract = await getContract();
+    const cryptoBuggyContract = await getContractAndBuggyBalance();
 
     if (!cryptoBuggyContract) return;
 
@@ -135,6 +144,7 @@ function StatisticPage() {
       <div className="statistic__dark-bg">
         <nav className="statistic__nav">
           <p>Buggy DAO {buggyBalance? buggyBalance : 0} DAO</p>
+
           <button className="statistic__nav-center-button">
             Multiply your donation by x3
           </button>
