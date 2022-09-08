@@ -117,7 +117,7 @@ function MintPage() {
       )}
       <div className="mint-page__dark-bg">
         <nav className="mint-page__nav">
-          <p>Buggy DAO {buggyBalance} DAO</p>
+          <p>Buggy DAO {buggyBalance ? buggyBalance.toFixed(2) : 0} DAO</p>
           <button className="mint-page__nav-center-button">
             Multipy your donation by x3
           </button>
