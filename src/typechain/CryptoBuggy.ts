@@ -4,6 +4,7 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -24,7 +25,7 @@ import type {
 
 export interface CryptoBuggyInterface extends utils.Interface {
   functions: {
-    "addFund(string)": FunctionFragment;
+    "addFund(string,uint256)": FunctionFragment;
     "buggyToken()": FunctionFragment;
     "nft()": FunctionFragment;
     "price()": FunctionFragment;
@@ -36,7 +37,7 @@ export interface CryptoBuggyInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "addFund",
-    values: [PromiseOrValue<string>]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "buggyToken",
@@ -82,6 +83,7 @@ export interface CryptoBuggy extends BaseContract {
   functions: {
     addFund(
       _signature: PromiseOrValue<string>,
+      count: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -94,6 +96,7 @@ export interface CryptoBuggy extends BaseContract {
 
   addFund(
     _signature: PromiseOrValue<string>,
+    count: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -106,6 +109,7 @@ export interface CryptoBuggy extends BaseContract {
   callStatic: {
     addFund(
       _signature: PromiseOrValue<string>,
+      count: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -121,6 +125,7 @@ export interface CryptoBuggy extends BaseContract {
   estimateGas: {
     addFund(
       _signature: PromiseOrValue<string>,
+      count: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -134,6 +139,7 @@ export interface CryptoBuggy extends BaseContract {
   populateTransaction: {
     addFund(
       _signature: PromiseOrValue<string>,
+      count: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -71,6 +71,7 @@
   }
 
   &__dark-bg {
+    padding-bottom: 50px;
     background-color: rgba(0, 0, 0, 0.8);
   }
 
@@ -117,6 +118,7 @@
       color: #ffffff;
       font-size: 20px;
       padding: 20px 0;
+      margin: 0 auto;
     }
 
     &-bg {
@@ -126,6 +128,7 @@
       flex-direction: column;
       display: flex;
       justify-content: center;
+      padding-bottom: 35px;
     }
 
     &-container {
@@ -171,6 +174,65 @@
       gap: 30px;
     }
   }
+
+  &__input-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 125px;
+    margin-top: 100px;
+  }
+
+  &__select,
+  &__input,
+  &__input-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+  &__input {
+    input {
+      width: 300px;
+      background: transparent;
+      height: 40px;
+      border: 1px solid #2fe212;
+      border-radius: 40px 0px;
+      letter-spacing: 0.035em;
+      color: #ffffff;
+      font-size: 20px;
+      padding: 10px 25px;
+      cursor: pointer;
+      position: relative;
+
+      &:focus {
+        border: 1px solid #2fe212;
+        outline: none;
+      }
+    }
+  }
+
+  &__input-text {
+    margin-top: 30px;
+    align-items: center;
+  }
+
+  &__donate-btn {
+    border: 1px solid #2df30d;
+    border-radius: 40px 0px;
+    width: 300px;
+    height: 40px;
+    background: none;
+    color: #f8f1f1;
+    text-align: center;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    font-size: 20px;
+    line-height: 23px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 100px;
+  }
 }
 
 .green-line {
@@ -181,4 +243,43 @@
     border-left: 1px solid #2fe212;
     height: 100vh;
   }
+}
+
+.input-text {
+  color: #ffffff;
+  letter-spacing: 0.035em;
+  font-size: 20px;
+  line-height: 23px;
+  margin-bottom: 5px;
+}
+
+.buggy-amount {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 18px;
+  text-align: center;
+  letter-spacing: 0.035em;
+
+  color: #585858;
+}
+
+.text-area {
+  width: 722px;
+  background: rgb(0, 0, 0, 0.4);
+  border-radius: 60px 0px;
+  border: 1px solid #2fe212;
+  color: #ffffff;
+  letter-spacing: 0.035em;
+  font-size: 20px;
+  resize: none;
+  padding: 25px;
+
+  &:focus {
+    border: 1px solid #2fe212;
+    outline: none;
+  }
+}
+
+.amount-error {
+  color: #dc143c;
 }

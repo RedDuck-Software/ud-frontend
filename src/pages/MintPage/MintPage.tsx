@@ -1,8 +1,10 @@
+/* eslint-disable */
 import { useWeb3React } from '@web3-react/core';
 import { BigNumber, ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
 // import NFT from '../../components/NFT/NFT';
+import Dropdown from '../../components/Dropdown/Dropdown';
 import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { CryptoBuggy__factory } from '../../typechain';
@@ -11,6 +13,7 @@ import './mintPage.scss';
 function MintPage() {
   const [amountToDonate, setAmountToDonate] = useState('0');
   const [buggyPrice, setBuggyPrice] = useState<BigNumber>(BigNumber.from(0));
+  const [selectedOption, setSelectedOption] = useState<string>('Full');
   const [isError, setIsError] = useState(false);
   const { account, connector } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
@@ -38,6 +41,8 @@ function MintPage() {
       const contract = await getContract();
       if (!contract) return;
       const addFunxTx = await contract.addFund('test signature', {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         value: buggyPrice,
       });
       await addFunxTx.wait();
@@ -101,37 +106,52 @@ function MintPage() {
                 <p>0.09 ETH</p>
               </div>
             </div>
-            <div
-              style={{ background: 'none' }}
-              className="mint-page__balances-currency-amount"
-            >
-              <div className="mint-page__balances-text-wrapper">
-                <p>USD Coin</p>
-                <p>3.18 USDC</p>
-              </div>
-            </div>
           </div>
         </div>
         <hr className="green-line" />
         <div className="mint-page__content">
-          <input
-            placeholder="Amount to donate..."
-            type="number"
-            min="0"
-            max="2000"
-            value={amountToDonate}
-            onChange={(event) => setAmountToDonate(event.target.value)}
-          ></input>
-          {isError && <span>Amount in input is not correct</span>}
+          <div className="mint-page__input-wrapper">
+            <div className="mint-page__select">
+              <span className="input-text">Mode</span>
+              <Dropdown setSelectedOption={setSelectedOption} />
+            </div>
+            <div className="mint-page__input">
+              <span className="input-text">Amount</span>
+              <input
+                placeholder="Amount to donate..."
+                type="number"
+                min="0"
+                max="2000"
+                value={amountToDonate}
+                onChange={(event) => setAmountToDonate(event.target.value)}
+              />
+              <span className="buggy-amount">1B = 2000$</span>
+              {isError && (
+                <span className="amount-error">
+                  Amount in input is not correct
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="mint-page__input-text">
+            <span className="input-text">Your signature for buggy</span>
+            <textarea
+              className="text-area"
+              id="w3review"
+              name="w3review"
+              rows={5}
+              cols={50}
+              maxLength={100}
+            ></textarea>
+          </div>
         </div>
-        <div className="input-wrapper">
-          <button onClick={() => addFund()}>Donate</button>
-        </div>
-        <p>
+        <button className="mint-page__donate-btn" onClick={() => addFund()}>
+          Donate
+        </button>
+        {/* <p>
           Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}
-        </p>
+        </p> */}
       </div>
-      <p>Price of 1 buggy: {ethers.utils.formatUnits(buggyPrice.toString())}</p>
     </div>
   );
 }
