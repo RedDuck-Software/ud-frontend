@@ -12,6 +12,20 @@
 }
 
 .statistic {
+  &__go-back {
+
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 15px;
+    cursor: pointer;
+
+    * {
+      color: #2df30d;
+    }
+  }
+
   &__nav {
     display: flex;
     width: 100%;
@@ -193,14 +207,17 @@
   margin: 20px;
   color: #ffffff;
 }
+
 .statistic-header {
   display: flex;
   justify-content: center;
 }
+
 .statistic-title {
   color: #2df30d;
   text-align: center;
 }
+
 .statistic-cirle {
   display: flex;
   justify-content: center;
