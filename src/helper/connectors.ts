@@ -18,7 +18,7 @@ export const gnosisconnect = new SafeAppConnector({});
 export const uauth = new UAuthConnector({
   uauth: new UAuth({
     clientID: '0ef4d6a7-91da-4cf4-be75-a1222e06828b',
-    redirectUri: 'http://localhost:3000',
+    redirectUri: 'https://merry-scone-777a4c.netlify.app',
     scope: 'openid wallet',
   }),
   connectors: { injected, walletconnect },

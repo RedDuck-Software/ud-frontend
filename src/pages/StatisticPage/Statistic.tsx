@@ -18,7 +18,6 @@ function StatisticPage() {
   const [totalBoughtBuggy, setTotalBoughtBugg] = useState<number>();
   const [totalUsers, setTotalUsers] = useState<number>();
   const [totalCreatedBuggy, setTotalCreatedBuggy] = useState<number>();
-  const [buggyBalance, setBuggyBalance] = useState(0);
   const [nftAddr, setNftAddr] = useState('');
   const [buggyBalance, setBuggyBalance] = useState(0);
 
@@ -89,7 +88,7 @@ function StatisticPage() {
         await connector.getProvider(),
       );
 
-      const cryptoBuggyContract = await getContract();
+      const cryptoBuggyContract = await getContractAndBuggyBalance();
       if (!cryptoBuggyContract) return;
 
       const signer = provider.getSigner();      

@@ -35,7 +35,7 @@ const LandingPage = () => {
               </div>
               <div className="landing__button-wrapper">
                 <button
-                  className="button"
+                  className="button button-one"
                   onClick={() => navigate('/mint-page')}
                 >
                   shut up and take my money!
@@ -136,7 +136,7 @@ const LandingPage = () => {
             <div className="landing__images-wrapper">
               <div className="landing__images-wrapper-bg"></div>
               <img src={image1} />
-              <img src={image2} />
+              <img className="landing__images-wrapper-image-2" src={image2} />
             </div>
             <hr className="green-line-2" />
           </div>
