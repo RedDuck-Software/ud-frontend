@@ -1,13 +1,16 @@
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
+import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 import { Audio } from 'react-loader-spinner'
+import { useNavigate } from 'react-router-dom';
 
 import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './Statistic.scss';
+
 
 function StatisticPage() {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -20,6 +23,8 @@ function StatisticPage() {
   const [totalCreatedBuggy, setTotalCreatedBuggy] = useState<number>();
   const [nftAddr, setNftAddr] = useState('');
   const [buggyBalance, setBuggyBalance] = useState(0);
+
+  const navigate = useNavigate();
 
   // const [isError, setIsError] = useState(false);
 
@@ -164,6 +169,12 @@ function StatisticPage() {
             {buttonText()}
           </button>
         </nav>
+        <div
+          onClick={() => navigate('/mint-page')}
+          className='statistic__go-back'>
+          <BsFillArrowLeftSquareFill style={{ fontSize: '28px' }} />
+          <p>Back to Mint Page</p>
+        </div>
         <div className="statistic-header">
           <Audio height="80" width="80" color="#2df30d" ariaLabel="loading" />
           <h1 className="statistic-title">Buggy DAO Statistic</h1>

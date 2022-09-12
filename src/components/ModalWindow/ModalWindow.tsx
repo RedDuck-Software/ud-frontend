@@ -28,7 +28,7 @@ const ModalWindow = ({
           </>
         ) : (
           <>
-            <div className="modal-text">The donation procced successfully!</div>
+            <div className="modal-text">The donation proceeded successfully!</div>
             <img src={success} className="modal-icon" />
           </>
         )}
