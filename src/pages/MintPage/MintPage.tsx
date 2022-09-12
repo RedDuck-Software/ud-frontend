@@ -31,7 +31,7 @@ function MintPage() {
   const [buggyPrice, setBuggyPrice] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string>('Full');
   const [isError, setIsError] = useState(false);
-  const [isTxDone, setIsTxDone] = useState(false);
+  const [isTxDone, setIsTxDone] = useState<boolean>(false);
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
   const [nftsImages, setNFTsImages] = useState<INftObjs[]>();
@@ -184,7 +184,7 @@ function MintPage() {
 
       setIsTxDone(false);
     };
-
+  }
       getData();
   }, [account, isTxDone]);
 
