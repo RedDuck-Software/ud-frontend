@@ -81,19 +81,24 @@ function MintPage() {
       setIsError(true);
       return;
     }
+    setIsError(false);
     try {
       const contracts = await getContract();
       if (!contracts) return;
       const { cryptoBuggyContract } = contracts;
-      const numberOfBuggys = Number(amountToDonate) / Number(buggyPrice);
-      console.log('Number of buggys to buy: ', numberOfBuggys);
+      console.log('Number of buggys to buy: ', amountToDonate);
       console.log('Signature: ', signature);
-      console.log('Amount to spend: ', amountToDonate);
+      console.log(
+        'Amount to spend: ',
+        (amountToDonate * buggyPrice).toString(),
+      );
       const addFundTx = await cryptoBuggyContract.addFund(
         signature,
-        BigNumber.from(numberOfBuggys),
+        BigNumber.from(amountToDonate),
         {
-          value: ethers.utils.parseUnits(amountToDonate.toString()),
+          value: ethers.utils.parseUnits(
+            (amountToDonate * buggyPrice).toFixed(3).toString(),
+          ),
         },
       );
       setIsLoading(true);
@@ -127,9 +132,9 @@ function MintPage() {
       const { cryptoBuggyContract } = contracts;
       console.log('Amount to spend: ', amountToDonate);
 
-      const addFundTx = await cryptoBuggyContract.addFundPartially(
-        signature, {
-        value: ethers.utils.parseUnits(amountToDonate.toString())
+      const addFundTx = await cryptoBuggyContract.addFundPartially(signature, {
+        value: ethers.utils.parseUnits(amountToDonate.toString()),
+      });
 
       setIsLoading(true);
       await addFundTx.wait();
@@ -199,7 +204,7 @@ function MintPage() {
 
   useEffect(() => {
     getBuggyPrice().then((price) => {
-      setBuggyPrice(ethers.utils.formatUnits(price, 18));
+      setBuggyPrice(+ethers.utils.formatUnits(price, 18));
     });
   }, []);
 
@@ -271,18 +276,14 @@ function MintPage() {
                   <p>MATIC</p>
                   <p>{nativeTokenBalance} MATIC</p>
                 </div>
-
               </div>
             </div>
           </div>
           <hr className="green-line" />
           <div className="mint-page__content">
-            <div className='mint-page-headers'>
-
-
-            </div>
+            <div className="mint-page-headers"></div>
             <div className="mint-page__input-wrapper">
-              <div className='full-part'>
+              <div className="full-part">
                 <div className="input-text-amount">
                   <span className="input-text">Mode</span>
                   <span className="buggy-amount">Partial/Full</span>
@@ -295,29 +296,47 @@ function MintPage() {
                 <div>
                   <div className="input-text-amount">
                     <span className="input-text">Amount</span>
-                    <span className="buggy-amount">1B = {buggyPrice} MATIC</span>
+                    <span className="buggy-amount">
+                      1B = {buggyPrice} MATIC
+                    </span>
                   </div>
                 </div>
-                <div className='flex-d'>
-                  <div >
-                    <button className='btn-counter' onClick={() => amountToDonate >= 1? setAmountToDonate(amountToDonate - 1) : ''}>-</button>
+                <div className="flex-d">
+                  <div>
+                    <button
+                      className="btn-counter"
+                      onClick={() =>
+                        amountToDonate >= 1
+                          ? setAmountToDonate(amountToDonate - 1)
+                          : ''
+                      }
+                    >
+                      -
+                    </button>
                     <input
                       placeholder="Amount to donate..."
                       type="text"
                       disabled={true}
                       step={
                         buggyPrice
-                          ?
-                          selectedOption === "Full" ? buggyPrice : buggyPrice / 2
-                          :
-                          1
+                          ? selectedOption === 'Full'
+                            ? buggyPrice
+                            : buggyPrice / 2
+                          : 1
                       }
                       value={amountToDonate}
                     />
-                    <button className='btn-counter' onClick={() => setAmountToDonate(amountToDonate + 1)}>+</button>
+                    <button
+                      className="btn-counter"
+                      onClick={() => setAmountToDonate(amountToDonate + 1)}
+                    >
+                      +
+                    </button>
                   </div>
-                  <div className='flex-d'> 
-                    <span>Total price:{(amountToDonate * buggyPrice).toFixed(3)}</span>
+                  <div className="flex-d">
+                    <span>
+                      Total price:{(amountToDonate * buggyPrice).toFixed(3)}
+                    </span>
                   </div>
                 </div>
                 {isError && (
