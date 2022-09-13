@@ -1,1 +1,2 @@
 export const CRYPTO_BUGGY_ADDRESS = '0xb42dd7877687a62B04C7533c34C9Ab3F4AfCBFF2';
+export const NETWORK_NAME = 'rinkeby';
