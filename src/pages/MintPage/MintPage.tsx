@@ -27,7 +27,7 @@ function MintPage() {
   const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [user, setUser] = useState<string>();
   const [isGnosisError, setGnosisError] = useState(false);
-  const [amountToDonate, setAmountToDonate] = useState('0');
+  const [amountToDonate, setAmountToDonate] = useState<number>(0);
   const [buggyPrice, setBuggyPrice] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string>('Full');
   const [isError, setIsError] = useState(false);
@@ -37,6 +37,7 @@ function MintPage() {
   const [nftsImages, setNFTsImages] = useState<INftObjs[]>();
   const [isModalShown, setIsModalShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [count, setCount] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -80,7 +81,7 @@ function MintPage() {
         signature,
         BigNumber.from(numberOfBuggys),
         {
-          value: ethers.utils.parseUnits(amountToDonate),
+          value: ethers.utils.parseUnits(amountToDonate.toString()),
         },
       );
       setIsLoading(true);
@@ -111,7 +112,7 @@ function MintPage() {
       console.log('Amount to spend: ', amountToDonate);
       const addFundTx = await cryptoBuggyContract.addFundPartially(
         signature, {
-        value: ethers.utils.parseUnits(amountToDonate)
+        value: ethers.utils.parseUnits(amountToDonate.toString())
       });
       setIsLoading(true);
       await addFundTx.wait();
@@ -229,33 +230,55 @@ function MintPage() {
                   <p>MATIC</p>
                   <p>{nativeTokenBalance} MATIC</p>
                 </div>
+
               </div>
             </div>
           </div>
           <hr className="green-line" />
           <div className="mint-page__content">
+            <div className='mint-page-headers'>
+
+
+            </div>
             <div className="mint-page__input-wrapper">
-              <div className="mint-page__select">
-                <span className="input-text">Mode</span>
-                <Dropdown setSelectedOption={setSelectedOption} />
+              <div className='full-part'>
+                <div className="input-text-amount">
+                  <span className="input-text">Mode</span>
+                  <span className="buggy-amount">Partial/Full</span>
+                </div>
+                <div className="mint-page__select">
+                  <Dropdown setSelectedOption={setSelectedOption} />
+                </div>
               </div>
               <div className="mint-page__input">
-                <span className="input-text">Amount</span>
-                <input
-                  placeholder="Amount to donate..."
-                  type="number"
-                  min="0"
-                  step={
-                    buggyPrice
-                      ?
-                      selectedOption === "Full" ? buggyPrice : buggyPrice / 2
-                      :
-                      1
-                  }
-                  value={amountToDonate}
-                  onChange={(event) => setAmountToDonate(event.target.value)}
-                />
-                <span className="buggy-amount">1B = {buggyPrice} MATIC</span>
+                <div>
+                  <div className="input-text-amount">
+                    <span className="input-text">Amount</span>
+                    <span className="buggy-amount">1B = {buggyPrice} MATIC</span>
+                  </div>
+                </div>
+                <div className='flex-d'>
+                  <div >
+                    <button className='btn-counter' onClick={() => amountToDonate >= 0.1? setAmountToDonate(amountToDonate - 0.1) : ''}>-</button>
+                    <input
+                      placeholder="Amount to donate..."
+                      type="text"
+                      disabled={true}
+                      step={
+                        buggyPrice
+                          ?
+                          selectedOption === "Full" ? buggyPrice : buggyPrice / 2
+                          :
+                          1
+                      }
+                      value={amountToDonate}
+                    />
+                    <button className='btn-counter' onClick={() => setAmountToDonate(amountToDonate + 0.1)}>+</button>
+                  </div>
+                  <div>
+                    <span>Total price:{2}</span>
+                  </div>
+                </div>
                 {isError && (
                   <span className="amount-error">
                     Amount in input is not correct

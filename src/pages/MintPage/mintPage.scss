@@ -205,7 +205,7 @@
     display: flex;
     justify-content: center;
     gap: 125px;
-    margin-top: 100px;
+    margin-top: 30px;
   }
 
   &__select,
@@ -213,8 +213,10 @@
   &__input-text {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    align-items: flex-start;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    
   }
 
   &__input {
@@ -241,6 +243,8 @@
   &__input-text {
     margin-top: 30px;
     align-items: center;
+    display: flex;
+    flex-direction: column;
   }
 
   &__donate-btn {
@@ -290,8 +294,7 @@
   line-height: 18px;
   text-align: center;
   letter-spacing: 0.035em;
-
-  color: #585858;
+  color: #ffffff;
 }
 
 .text-area {
@@ -313,4 +316,48 @@
 
 .amount-error {
   color: #dc143c;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {  
+
+   opacity: 1;
+
+}
+
+.btn-counter {
+  background-color: #2fe212;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #000;
+  border: 4px solid rgb(9, 9, 9);
+}
+
+.btn-counter:hover {
+  background-color: #16a800;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #000;
+ 
+}
+.mint-page-headers{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.input-text-amount{ 
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-d{
+  display: flex;
+  flex-direction: column;
+}
+
+.full-part{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
