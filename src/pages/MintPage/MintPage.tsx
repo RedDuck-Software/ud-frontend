@@ -37,7 +37,6 @@ function MintPage() {
   const [nftsImages, setNFTsImages] = useState<INftObjs[]>();
   const [isModalShown, setIsModalShown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [count, setCount] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -259,7 +258,7 @@ function MintPage() {
                 </div>
                 <div className='flex-d'>
                   <div >
-                    <button className='btn-counter' onClick={() => amountToDonate >= 0.1? setAmountToDonate(amountToDonate - 0.1) : ''}>-</button>
+                    <button className='btn-counter' onClick={() => amountToDonate >= 1? setAmountToDonate(amountToDonate - 1) : ''}>-</button>
                     <input
                       placeholder="Amount to donate..."
                       type="text"
@@ -273,10 +272,10 @@ function MintPage() {
                       }
                       value={amountToDonate}
                     />
-                    <button className='btn-counter' onClick={() => setAmountToDonate(amountToDonate + 0.1)}>+</button>
+                    <button className='btn-counter' onClick={() => setAmountToDonate(amountToDonate + 1)}>+</button>
                   </div>
-                  <div>
-                    <span>Total price:{2}</span>
+                  <div className='flex-d'> 
+                    <span>Total price:{(amountToDonate * buggyPrice).toFixed(3)}</span>
                   </div>
                 </div>
                 {isError && (
