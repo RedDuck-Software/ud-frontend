@@ -5,15 +5,21 @@ import React, { useEffect, useState } from 'react';
 
 import NFT from '../../components/NFT/NFT';
 import Dropdown from '../../components/Dropdown/Dropdown';
-import { CRYPTO_BUGGY_ADDRESS, } from '../../helper/constants';
+import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
-import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
+import {
+  BuggyNFT,
+  BuggyToken__factory,
+  CryptoBuggy__factory,
+} from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
 import './mintPage.scss';
 import { useNavigate } from 'react-router-dom';
 import { BuggyNFT__factory } from '../../typechain/factories/BuggyNFT__factory';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
 import Loader from '../../components/Loader/Loader';
+
+import { getBuggyPrice } from '../../funcs/getBuggyPrice';
 
 interface INftObjs {
   id: string;
@@ -27,8 +33,10 @@ function MintPage() {
   const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [user, setUser] = useState<string>();
   const [isGnosisError, setGnosisError] = useState(false);
+
   const [amountToDonate, setAmountToDonate] = useState<number>(0);
   const [buggyPrice, setBuggyPrice] = useState(0);
+
   const [selectedOption, setSelectedOption] = useState<string>('Full');
   const [isError, setIsError] = useState(false);
   const [isTxDone, setIsTxDone] = useState(false);
@@ -60,7 +68,12 @@ function MintPage() {
     const nftAddr = await cryptoBuggyContract.buggyNFT();
     const buggyNFTContract = BuggyNFT__factory.connect(nftAddr, signer);
 
-    return { cryptoBuggyContract, buggyTokenContract, buggyNFTContract, nftAddr };
+    return {
+      cryptoBuggyContract,
+      buggyTokenContract,
+      buggyNFTContract,
+      nftAddr,
+    };
   };
 
   const addFund = async () => {
@@ -85,6 +98,10 @@ function MintPage() {
       );
       setIsLoading(true);
       await addFundTx.wait();
+      await fetchNFTsAggregate(
+        contracts.buggyNFTContract,
+        contracts.buggyNFTContract.address,
+      );
       setIsLoading(false);
       setIsTxDone(true);
       console.log('Funds sended');
@@ -109,16 +126,26 @@ function MintPage() {
       if (!contracts) return;
       const { cryptoBuggyContract } = contracts;
       console.log('Amount to spend: ', amountToDonate);
+
       const addFundTx = await cryptoBuggyContract.addFundPartially(
         signature, {
         value: ethers.utils.parseUnits(amountToDonate.toString())
-      });
+
       setIsLoading(true);
       await addFundTx.wait();
+      await fetchNFTsAggregate(
+        contracts.buggyNFTContract,
+        contracts.buggyNFTContract.address,
+      );
       setIsLoading(false);
+      setIsTxDone(true);
       console.log('Funds sended');
+      setIsModalShown(true);
     } catch (e) {
+      setIsError(true);
+      setIsModalShown(true);
       console.log(e);
+      return;
     }
   };
 
@@ -128,40 +155,53 @@ function MintPage() {
     setGnosisError(false);
   }
 
+  async function fetchNFTsAggregate(
+    buggyNFTContract: BuggyNFT,
+    nftAddr: string,
+  ) {
+    const nftsData = await fetchNFTsForContract(nftAddr);
+    console.log(nftsData);
+
+    if (nftsData && nftsData.length) {
+      const nftsImages = await Promise.all(
+        nftsData.map(async (item) => {
+          const image = await buggyNFTContract.getImage(item.token_id);
+          return { id: item.token_id, image };
+        }),
+      );
+
+      setNFTsImages(nftsImages);
+    }
+  }
+
   useEffect(() => {
     const getData = async () => {
       const contracts = await getContract();
       if (!contracts) return;
-      const { cryptoBuggyContract, buggyTokenContract, buggyNFTContract, nftAddr } =
-        contracts;
-      const price = await cryptoBuggyContract.price();
-      console.log('Price of 1 buggy: ', Number(price) / Math.pow(10, 18));
-      setBuggyPrice(Number(price) / Math.pow(10, 18));
+      const { buggyTokenContract, buggyNFTContract, nftAddr } = contracts;
 
       if (!account) return;
-      const nftsData = await fetchNFTsForContract(nftAddr);
-      console.log(nftsData);
 
       const buggyBalance = await buggyTokenContract.balanceOf(account);
-      console.log('Buggy balance: ', buggyBalance);
       console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
       setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
 
-      if (nftsData && nftsData.length) {
-        const nftsImages = await Promise.all(
-          nftsData.map(async (item) => {
-            const image = await buggyNFTContract.getImage(item.token_id);
-            return { id: item.token_id, image };
-          }),
-        );
+      await fetchNFTsAggregate(buggyNFTContract, nftAddr);
 
-        setNFTsImages(nftsImages);
-      }
+      const nftsData = await fetchNFTsForContract(nftAddr);
+      console.log(nftsData);
+
       setIsTxDone(false);
     };
 
     getData();
   }, [account, isTxDone]);
+
+  useEffect(() => {
+    getBuggyPrice().then((price) => {
+      setBuggyPrice(ethers.utils.formatUnits(price, 18));
+    });
+  }, []);
 
   const buttonText = () => {
     if (user) return user;
@@ -197,9 +237,9 @@ function MintPage() {
               style={
                 user || account
                   ? {
-                    background: '#232622',
-                    color: 'white',
-                  }
+                      background: '#232622',
+                      color: 'white',
+                    }
                   : {}
               }
               onClick={() =>
@@ -214,7 +254,9 @@ function MintPage() {
             <div className="container">
               <div className="mint-page__nfts-grid">
                 {nftsImages?.length &&
-                  nftsImages.map((nft) => <NFT image={nft.image} key={nft.id} />)}
+                  nftsImages.map((nft) => (
+                    <NFT image={nft.image} key={nft.id} />
+                  ))}
               </div>
             </div>
           </div>
@@ -301,17 +343,20 @@ function MintPage() {
           </div>
           <button
             className="mint-page__donate-btn"
-            onClick={() => !account
-              ? setIsModalActive(true) :
-              selectedOption === "Full" ? addFund() : addFundPartially()}>
+            onClick={() =>
+              !account
+                ? setIsModalActive(true)
+                : selectedOption === 'Full'
+                ? addFund()
+                : addFundPartially()
+            }
+          >
             Donate
           </button>
 
           <button
             className="mint-page__donate-btn"
-            onClick={() =>
-              !account ? setIsModalActive(true) : navigate('/statistic-page')
-            }
+            onClick={() => navigate('/statistic-page')}
           >
             Visit Statistic
           </button>
