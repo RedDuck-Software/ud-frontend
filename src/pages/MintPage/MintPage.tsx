@@ -34,7 +34,7 @@ function MintPage() {
   const [user, setUser] = useState<string>();
   const [isGnosisError, setGnosisError] = useState(false);
 
-  const [amountToDonate, setAmountToDonate] = useState<number>(0);
+  const [amountToDonate, setAmountToDonate] = useState<string>('');
   const [buggyPrice, setBuggyPrice] = useState(0);
 
   const [selectedOption, setSelectedOption] = useState<string>('Full');
@@ -90,14 +90,14 @@ function MintPage() {
       console.log('Signature: ', signature);
       console.log(
         'Amount to spend: ',
-        (amountToDonate * buggyPrice).toString(),
+        (+amountToDonate * buggyPrice).toString(),
       );
       const addFundTx = await cryptoBuggyContract.addFund(
         signature,
         BigNumber.from(amountToDonate),
         {
           value: ethers.utils.parseUnits(
-            (amountToDonate * buggyPrice).toFixed(3).toString(),
+            (+amountToDonate * buggyPrice).toFixed(3).toString(),
           ),
         },
       );
@@ -122,7 +122,7 @@ function MintPage() {
   };
 
   const addFundPartially = async () => {
-    if (+amountToDonate <= 0) {
+    if (+amountToDonate <= 0 || +amountToDonate >= buggyPrice) {
       setIsError(true);
       return;
     }
@@ -131,9 +131,13 @@ function MintPage() {
       if (!contracts) return;
       const { cryptoBuggyContract } = contracts;
       console.log('Amount to spend: ', amountToDonate);
+      console.log(
+        'Amount to donate ether: ',
+        ethers.utils.parseUnits(amountToDonate),
+      );
 
       const addFundTx = await cryptoBuggyContract.addFundPartially(signature, {
-        value: ethers.utils.parseUnits(amountToDonate.toString()),
+        value: ethers.utils.parseUnits(amountToDonate),
       });
 
       setIsLoading(true);
@@ -216,6 +220,10 @@ function MintPage() {
       return accountFormatted?.slice(0, 12);
     } else return 'Connect wallet';
   };
+
+  useEffect(() => {
+    setAmountToDonate('0');
+  }, [selectedOption]);
 
   return (
     <Loader isLoading={isLoading}>
@@ -303,40 +311,72 @@ function MintPage() {
                 </div>
                 <div className="flex-d">
                   <div>
-                    <button
-                      className="btn-counter"
-                      onClick={() =>
-                        amountToDonate >= 1
-                          ? setAmountToDonate(amountToDonate - 1)
-                          : ''
-                      }
-                    >
-                      -
-                    </button>
-                    <input
-                      placeholder="Amount to donate..."
-                      type="text"
-                      disabled={true}
-                      step={
-                        buggyPrice
-                          ? selectedOption === 'Full'
-                            ? buggyPrice
-                            : buggyPrice / 2
-                          : 1
-                      }
-                      value={amountToDonate}
-                    />
-                    <button
-                      className="btn-counter"
-                      onClick={() => setAmountToDonate(amountToDonate + 1)}
-                    >
-                      +
-                    </button>
+                    {selectedOption === 'Full' && (
+                      <button
+                        className="btn-counter"
+                        onClick={() =>
+                          +amountToDonate >= 1
+                            ? setAmountToDonate(
+                                (+amountToDonate - 1).toString(),
+                              )
+                            : ''
+                        }
+                      >
+                        -
+                      </button>
+                    )}
+                    {selectedOption === 'Full' ? (
+                      <input
+                        placeholder="Amount to donate..."
+                        type="text"
+                        disabled={true}
+                        step={
+                          buggyPrice
+                            ? selectedOption === 'Full'
+                              ? buggyPrice
+                              : buggyPrice / 2
+                            : 1
+                        }
+                        value={amountToDonate}
+                      />
+                    ) : (
+                      <input
+                        placeholder="Amount to donate..."
+                        type="text"
+                        onChange={(e) => {
+                          const regex = /(\..*){2,}/;
+                          if (regex.test(e.target.value)) return;
+
+                          setAmountToDonate(
+                            e.target.value.replace(/[^0-9.]/g, ''),
+                          );
+                        }}
+                        value={amountToDonate}
+                      />
+                    )}
+                    {selectedOption === 'Full' && (
+                      <button
+                        className="btn-counter"
+                        onClick={() =>
+                          setAmountToDonate((+amountToDonate + 1).toString())
+                        }
+                      >
+                        +
+                      </button>
+                    )}
                   </div>
                   <div className="flex-d">
-                    <span>
-                      Total price:{(amountToDonate * buggyPrice).toFixed(3)}
-                    </span>
+                    {selectedOption === 'Full' ? (
+                      <span>
+                        Total price:
+                        {(+amountToDonate * buggyPrice).toFixed(3)}
+                      </span>
+                    ) : (
+                      <span>
+                        Part of buggy: 1 /{' '}
+                        {(+amountToDonate / buggyPrice).toFixed(3)}
+                      </span>
+                    )}
                   </div>
                 </div>
                 {isError && (
