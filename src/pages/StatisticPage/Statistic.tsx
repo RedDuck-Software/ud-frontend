@@ -6,7 +6,6 @@ import { Audio } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 
 import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
-import { NETWORK_NAME } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
@@ -31,7 +30,7 @@ function StatisticPage() {
 
   const getContractAndBuggyBalance = async () => {
     const provider = new ethers.providers.JsonRpcProvider(
-      `https://${NETWORK_NAME}.infura.io/v3/${process.env.REACT_APP_INFURA_API}`,
+      `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API}`,
     );
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
       CRYPTO_BUGGY_ADDRESS,

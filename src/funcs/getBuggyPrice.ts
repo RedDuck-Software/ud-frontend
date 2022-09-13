@@ -1,11 +1,11 @@
 import { ethers } from 'ethers';
 
-import { NETWORK_NAME, CRYPTO_BUGGY_ADDRESS } from '../helper/constants';
+import { CRYPTO_BUGGY_ADDRESS } from '../helper/constants';
 import { CryptoBuggy__factory } from '../typechain';
 
 export const getBuggyPrice = async (): Promise<string> => {
   const provider = new ethers.providers.JsonRpcProvider(
-    `https://${NETWORK_NAME}.infura.io/v3/${process.env.REACT_APP_INFURA_API}`,
+    `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API}`,
   );
 
   const cryptoBuggyContract = CryptoBuggy__factory.connect(

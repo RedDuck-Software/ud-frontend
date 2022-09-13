@@ -8,10 +8,12 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 const windowUrl = window.location.origin;
 
 // Instanciate your other connectors.
-export const injected = new InjectedConnector({ supportedChainIds: [1, 4, 5] });
+export const injected = new InjectedConnector({
+  supportedChainIds: [1, 4, 5, 137],
+});
 
 export const walletconnect = new WalletConnectConnector({
-  infuraId: 'c57d500279994e2ca6e832456b0ed250',
+  infuraId: `${process.env.REACT_APP_ALCHEMY_API}`,
   qrcode: true,
 });
 
