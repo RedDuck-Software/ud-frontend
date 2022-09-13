@@ -31,7 +31,7 @@ function MintPage() {
   const [buggyPrice, setBuggyPrice] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string>('Full');
   const [isError, setIsError] = useState(false);
-  const [isTxDone, setIsTxDone] = useState(false);
+  const [isTxDone, setIsTxDone] = useState<boolean>(false);
   const { account, connector, deactivate } = useWeb3React();
   const { fetchNFTsForContract } = useGetBuggyNFTs();
   const [nftsImages, setNFTsImages] = useState<INftObjs[]>();
@@ -163,19 +163,28 @@ function MintPage() {
       setBuggyPrice(Number(price) / Math.pow(10, 18));
 
       if (!account) return;
-      
+      const nftsData:any = await fetchNFTsForContract(nftAddr);
+      console.log(nftsData);
+
+
       const buggyBalance = await buggyTokenContract.balanceOf(account);
       console.log('Buggy balance: ', Number(buggyBalance) / Math.pow(10, 18));
       setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
       
       await fetchNFTsAggregate(buggyNFTContract, nftAddr);
 
-      const nftsData = await fetchNFTsForContract(nftAddr);
-      console.log(nftsData);
+      if (nftsData && nftsData.length) {
+        const nftsImages = await Promise.all(
+          nftsData.map(async (item:any) => {
+            const image = await buggyNFTContract.getImage(item.token_id);
+            return { id: item.token_id, image };
+          }),
+        );
+
 
       setIsTxDone(false);
     };
-
+  }
       getData();
   }, [account, isTxDone]);
 

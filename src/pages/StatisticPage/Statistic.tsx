@@ -21,7 +21,6 @@ function StatisticPage() {
   const [totalBoughtBuggy, setTotalBoughtBugg] = useState<number>();
   const [totalUsers, setTotalUsers] = useState<number>();
   const [totalCreatedBuggy, setTotalCreatedBuggy] = useState<number>();
-  // const [totalFundsInvested,setTotalFundsInvested] = useState<number>()
   const [nftAddr, setNftAddr] = useState('');
   const [buggyBalance, setBuggyBalance] = useState(0);
 
@@ -88,20 +87,34 @@ function StatisticPage() {
     setTotalCreatedBuggy(totalCreatedBuggy.toNumber());
     console.log('totalCreatedBuggy', totalCreatedBuggy.toNumber());
   };
+  const getDAOTokensBalance = async() =>{
+      if(!connector) return
+      const provider = new ethers.providers.Web3Provider(
+        await connector.getProvider(),
+      );
 
-  // const getTotalDonatedFunds = async () => {
-  //     if(totalBoughtBuggy == undefined || totalBoughtBuggy == null) return;
+      const cryptoBuggyContract = await getContractAndBuggyBalance();
+      if (!cryptoBuggyContract) return;
 
-  //     const res = totalBoughtBuggy * 1500
-  //     setTotalFundsInvested(res);
-  //     console.log('res',res);
-  //   };
+      const signer = provider.getSigner();      
 
+      const buggyTokenAddr = await cryptoBuggyContract.buggyToken();
+      const buggyTokenContract = BuggyToken__factory.connect(
+        buggyTokenAddr,
+        signer,
+      );
+      if (!account) return;
+
+      const buggyBalance = await buggyTokenContract.balanceOf(account);
+
+      setBuggyBalance(Number(buggyBalance) / Math.pow(10, 18));
+  }
+  
   useEffect(() => {
     getTotalUsers();
     getBoughtBuggy();
     getTotalCreatedBuggy();
-    // getTotalDonatedFunds()
+    getDAOTokensBalance()    
 
     if (!account) return;
 
@@ -134,7 +147,8 @@ function StatisticPage() {
       )}
       <div className="statistic__dark-bg">
         <nav className="statistic__nav">
-          <p>Buggy DAO {buggyBalance ? buggyBalance : 0} DAO</p>
+          <p>Buggy DAO {buggyBalance? buggyBalance : 0} DAO</p>
+
           <button className="statistic__nav-center-button">
             Multiply your donation by x3
           </button>
