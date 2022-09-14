@@ -5,7 +5,6 @@ import { BsFillArrowLeftSquareFill } from 'react-icons/bs';
 import { Audio } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 
-import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import { BuggyToken__factory, CryptoBuggy__factory } from '../../typechain';
 import ConnectWallet from '../ConnectWallet/ConnectWallet';
@@ -30,10 +29,10 @@ function StatisticPage() {
 
   const getContractAndBuggyBalance = async () => {
     const provider = new ethers.providers.JsonRpcProvider(
-      `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API}`,
+      `https://${process.env.REACT_APP_NETWORK_NAME}.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API}`,
     );
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
-      CRYPTO_BUGGY_ADDRESS,
+      process.env.REACT_APP_CRYPTO_BUGGY_ADDRESS!,
       provider,
     );
     const nftAddr = await cryptoBuggyContract.buggyNFT();

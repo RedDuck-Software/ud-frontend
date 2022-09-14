@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 
 import NFT from '../../components/NFT/NFT';
 import Dropdown from '../../components/Dropdown/Dropdown';
-import { CRYPTO_BUGGY_ADDRESS } from '../../helper/constants';
 import { useGetBuggyNFTs } from '../../hooks/useGetBuggyNFTs';
 import {
   BuggyNFT,
@@ -55,7 +54,7 @@ function MintPage() {
     );
     const signer = provider.getSigner();
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
-      CRYPTO_BUGGY_ADDRESS,
+      process.env.REACT_APP_CRYPTO_BUGGY_ADDRESS!,
       signer,
     );
     const nativeTokenBalance = await signer.getBalance();
