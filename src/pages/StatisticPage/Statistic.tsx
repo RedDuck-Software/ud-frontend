@@ -32,6 +32,7 @@ function StatisticPage() {
       `https://${process.env.REACT_APP_NETWORK_NAME}.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API}`,
     );
     const cryptoBuggyContract = CryptoBuggy__factory.connect(
+      // eslint-disable-next-line no-use-before-define
       process.env.REACT_APP_CRYPTO_BUGGY_ADDRESS!,
       provider,
     );
