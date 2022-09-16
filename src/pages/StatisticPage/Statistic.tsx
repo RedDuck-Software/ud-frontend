@@ -160,25 +160,37 @@ function StatisticPage() {
           <div>
             <h2>Total users</h2>
             <div className="statistic-cirle">
-              {totalUsers ? totalUsers : '...'}
+              {totalUsers ? totalUsers : totalUsers === 0 ? totalUsers : '...'}
             </div>
           </div>
           <div>
             <h2>Total bought buggy</h2>
             <div className="statistic-cirle">
-              {totalBoughtBuggy ? totalBoughtBuggy : '...'}
+              {totalBoughtBuggy
+                ? totalBoughtBuggy
+                : totalBoughtBuggy === 0
+                ? totalBoughtBuggy
+                : '...'}
             </div>
           </div>
           <div>
             <h2>Total created buggy</h2>
             <div className="statistic-cirle">
-              {totalCreatedBuggy ? totalCreatedBuggy : '...'}
+              {totalCreatedBuggy
+                ? totalCreatedBuggy
+                : totalCreatedBuggy === 0
+                ? totalCreatedBuggy
+                : '...'}
             </div>
           </div>
           <div>
             <h2>Total donated funds(MATIC)</h2>
             <div className="statistic-cirle">
-              {totalBoughtBuggy ? totalBoughtBuggy * 1500 : '...'}{' '}
+              {totalBoughtBuggy
+                ? totalBoughtBuggy * 1500
+                : totalBoughtBuggy === 0
+                ? totalBoughtBuggy
+                : '...'}{' '}
             </div>
           </div>
         </div>

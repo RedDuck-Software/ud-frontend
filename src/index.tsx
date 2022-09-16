@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { MoralisProvider } from 'react-moralis';
@@ -15,8 +16,8 @@ root.render(
   <React.StrictMode>
     <Router>
       <MoralisProvider
-        serverUrl="https://s3jkkgvi79jc.usemoralis.com:2053/server"
-        appId="w6lNar7mUnKjVtrYnnB1AdbO6F5juFIbpELXP1cO"
+        serverUrl={process.env.REACT_APP_MORALIS_SERVER_URL!}
+        appId={process.env.REACT_APP_MORALIS_APP_ID!}
       >
         <App />
       </MoralisProvider>

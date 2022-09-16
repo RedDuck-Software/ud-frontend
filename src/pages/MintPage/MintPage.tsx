@@ -372,7 +372,7 @@ function MintPage() {
                       </span>
                     ) : (
                       <span>
-                        Part of buggy: 1 /{' '}
+                        Part of buggy:{' '}
                         {(+amountToDonate / buggyPrice).toFixed(3)}
                       </span>
                     )}

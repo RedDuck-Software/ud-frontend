@@ -7,7 +7,8 @@ export const useGetBuggyNFTs = () => {
 
   const fetchNFTsForContract = async (contractAddress: string) => {
     const options = {
-      chain: 'rinkeby',
+      // eslint-disable-next-line
+      chain: `${process.env.REACT_APP_MORALIS_NETWORK_NAME!}`,
       address: account,
       token_address: contractAddress,
     };
