@@ -8,6 +8,7 @@ export const getBuggyPrice = async (): Promise<string> => {
   );
 
   const cryptoBuggyContract = CryptoBuggy__factory.connect(
+    // eslint-disable-next-line
     process.env.REACT_APP_CRYPTO_BUGGY_ADDRESS!,
     provider,
   );
