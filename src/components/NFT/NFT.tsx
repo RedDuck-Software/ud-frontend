@@ -1,7 +1,7 @@
 import './NFT.scss';
 import React from 'react';
 
-function NFT({ image }: { image: string }) {
+function NFT({ image }: { image: string | undefined }) {
   return (
     <div className="nft__container">
       <div className="nft__container-img">

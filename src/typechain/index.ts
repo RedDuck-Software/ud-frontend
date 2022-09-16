@@ -4,9 +4,11 @@
 export type { BuggyNFT } from "./BuggyNFT";
 export type { BuggyToken } from "./BuggyToken";
 export type { CryptoBuggy } from "./CryptoBuggy";
+export type { DonateNFT } from "./DonateNFT";
 export type { PartialBuggyNFT } from "./PartialBuggyNFT";
 export * as factories from "./factories";
 export { BuggyNFT__factory } from "./factories/BuggyNFT__factory";
 export { BuggyToken__factory } from "./factories/BuggyToken__factory";
 export { CryptoBuggy__factory } from "./factories/CryptoBuggy__factory";
+export { DonateNFT__factory } from "./factories/DonateNFT__factory";
 export { PartialBuggyNFT__factory } from "./factories/PartialBuggyNFT__factory";

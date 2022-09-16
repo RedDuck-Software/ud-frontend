@@ -8,14 +8,14 @@ export const useGetBuggyNFTs = () => {
   const fetchNFTsForContract = async (contractAddress: string) => {
     const options = {
       // eslint-disable-next-line
-      chain: `${process.env.REACT_APP_MORALIS_NETWORK_NAME!}`,
+      chain: `${process.env.REACT_APP_MORALIS_NETWORK_NAME}`,
       address: account,
       token_address: contractAddress,
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const rinkebyNFTs = await Web3Api.account.getNFTsForContract(options);
-    return rinkebyNFTs.result;
+    const NFTs = await Web3Api.account.getNFTsForContract(options);
+    return NFTs.result;
   };
 
   return { fetchNFTsForContract };
