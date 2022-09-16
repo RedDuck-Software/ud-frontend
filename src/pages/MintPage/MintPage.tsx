@@ -22,7 +22,7 @@ import { getBuggyPrice } from '../../funcs/getBuggyPrice';
 
 interface INftObjs {
   id: string;
-  image: string;
+  image: string | undefined;
 }
 
 function MintPage() {
@@ -64,7 +64,7 @@ function MintPage() {
       buggyTokenAddr,
       signer,
     );
-    const nftAddr = await cryptoBuggyContract.buggyNFT();
+    const nftAddr = await cryptoBuggyContract.donateNFT();
     const buggyNFTContract = BuggyNFT__factory.connect(nftAddr, signer);
 
     return {
@@ -168,13 +168,11 @@ function MintPage() {
     nftAddr: string,
   ) {
     const nftsData = await fetchNFTsForContract(nftAddr);
-    console.log(nftsData);
 
     if (nftsData && nftsData.length) {
       const nftsImages = await Promise.all(
         nftsData.map(async (item) => {
-          const image = await buggyNFTContract.getImage(item.token_id);
-          return { id: item.token_id, image };
+          return { id: item.token_id, image: item.token_uri };
         }),
       );
 

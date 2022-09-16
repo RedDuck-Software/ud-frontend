@@ -4,4 +4,5 @@
 export { BuggyNFT__factory } from "./BuggyNFT__factory";
 export { BuggyToken__factory } from "./BuggyToken__factory";
 export { CryptoBuggy__factory } from "./CryptoBuggy__factory";
+export { DonateNFT__factory } from "./DonateNFT__factory";
 export { PartialBuggyNFT__factory } from "./PartialBuggyNFT__factory";

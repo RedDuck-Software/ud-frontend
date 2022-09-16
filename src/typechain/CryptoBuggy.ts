@@ -35,11 +35,14 @@ export interface CryptoBuggyInterface extends utils.Interface {
     "boughtBuggy()": FunctionFragment;
     "buggyNFT()": FunctionFragment;
     "buggyToken()": FunctionFragment;
+    "donateNFT()": FunctionFragment;
     "owner()": FunctionFragment;
     "partialBuggyNFT()": FunctionFragment;
+    "partialUsers(address)": FunctionFragment;
     "price()": FunctionFragment;
     "raised()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setNewBuggyPrice(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "uniqUsers()": FunctionFragment;
     "users(address)": FunctionFragment;
@@ -53,11 +56,14 @@ export interface CryptoBuggyInterface extends utils.Interface {
       | "boughtBuggy"
       | "buggyNFT"
       | "buggyToken"
+      | "donateNFT"
       | "owner"
       | "partialBuggyNFT"
+      | "partialUsers"
       | "price"
       | "raised"
       | "renounceOwnership"
+      | "setNewBuggyPrice"
       | "transferOwnership"
       | "uniqUsers"
       | "users"
@@ -81,16 +87,25 @@ export interface CryptoBuggyInterface extends utils.Interface {
     functionFragment: "buggyToken",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "donateNFT", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "partialBuggyNFT",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "partialUsers",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "price", values?: undefined): string;
   encodeFunctionData(functionFragment: "raised", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setNewBuggyPrice",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -117,15 +132,24 @@ export interface CryptoBuggyInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "buggyNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buggyToken", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "donateNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "partialBuggyNFT",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "partialUsers",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "raised", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setNewBuggyPrice",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -199,15 +223,27 @@ export interface CryptoBuggy extends BaseContract {
 
     buggyToken(overrides?: CallOverrides): Promise<[string]>;
 
+    donateNFT(overrides?: CallOverrides): Promise<[string]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     partialBuggyNFT(overrides?: CallOverrides): Promise<[string]>;
+
+    partialUsers(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     price(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     raised(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setNewBuggyPrice(
+      newBuggyPrice: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -246,15 +282,27 @@ export interface CryptoBuggy extends BaseContract {
 
   buggyToken(overrides?: CallOverrides): Promise<string>;
 
+  donateNFT(overrides?: CallOverrides): Promise<string>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   partialBuggyNFT(overrides?: CallOverrides): Promise<string>;
+
+  partialUsers(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   price(overrides?: CallOverrides): Promise<BigNumber>;
 
   raised(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setNewBuggyPrice(
+    newBuggyPrice: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -293,15 +341,27 @@ export interface CryptoBuggy extends BaseContract {
 
     buggyToken(overrides?: CallOverrides): Promise<string>;
 
+    donateNFT(overrides?: CallOverrides): Promise<string>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     partialBuggyNFT(overrides?: CallOverrides): Promise<string>;
+
+    partialUsers(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     price(overrides?: CallOverrides): Promise<BigNumber>;
 
     raised(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setNewBuggyPrice(
+      newBuggyPrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
@@ -350,15 +410,27 @@ export interface CryptoBuggy extends BaseContract {
 
     buggyToken(overrides?: CallOverrides): Promise<BigNumber>;
 
+    donateNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     partialBuggyNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    partialUsers(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     price(overrides?: CallOverrides): Promise<BigNumber>;
 
     raised(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setNewBuggyPrice(
+      newBuggyPrice: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -398,15 +470,27 @@ export interface CryptoBuggy extends BaseContract {
 
     buggyToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    donateNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     partialBuggyNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    partialUsers(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     raised(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNewBuggyPrice(
+      newBuggyPrice: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

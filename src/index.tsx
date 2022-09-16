@@ -12,13 +12,13 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+const servelUrl = `${process.env.REACT_APP_MORALIS_SERVER_URL}`;
+const appId = `${process.env.REACT_APP_MORALIS_APP_ID}`;
+
 root.render(
   <React.StrictMode>
     <Router>
-      <MoralisProvider
-        serverUrl={process.env.REACT_APP_MORALIS_SERVER_URL!}
-        appId={process.env.REACT_APP_MORALIS_APP_ID!}
-      >
+      <MoralisProvider serverUrl={servelUrl} appId={appId}>
         <App />
       </MoralisProvider>
     </Router>
