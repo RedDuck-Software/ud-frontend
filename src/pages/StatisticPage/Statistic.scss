@@ -12,17 +12,28 @@
 }
 
 .statistic {
-  &__go-back {
+  &__wrapper {
+    height: 100%;
+  }
 
+  &__go-back {
     width: 250px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-left: 15px;
     cursor: pointer;
+    margin-bottom: 1rem;
 
     * {
       color: #2df30d;
+    }
+
+    @media (max-width: 580px) {
+      justify-content: unset;
+      margin: 0 auto;
+      margin-bottom: 1rem;
+      gap: 1rem;
     }
   }
 
@@ -34,9 +45,21 @@
     margin-bottom: 80px;
     background: #151515;
     height: 60px;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
     padding: 0 60px;
+
+    @media (max-width: 1150px) {
+      flex-direction: column;
+      height: 150px;
+
+      p {
+        margin-bottom: -5px;
+      }
+
+      @media (max-width: 525px) {
+        height: 180px;
+        padding: 0 30px;
+      }
+    }
 
     &-center-button {
       font-size: 24px;
@@ -47,6 +70,14 @@
       background-color: #151515;
       border: none;
       margin: 0 auto;
+
+      @media (max-width: 1150px) {
+        margin: 10px;
+      }
+
+      @media (max-width: 600px) {
+        font-size: 20px;
+      }
     }
 
     &-connect-wallet {
@@ -67,10 +98,14 @@
       &:hover {
         background: #16a800;
       }
-    }
 
-    &:hover {
-      background-color: rgba(0, 0, 0, 1);
+      @media (max-width: 600px) {
+        height: 30px;
+      }
+
+      @media (max-width: 385px) {
+        width: 270px;
+      }
     }
 
     p {
@@ -79,14 +114,41 @@
   }
 
   &__background-photo {
-    background: no-repeat center/100% url('../../images/background.png');
-    background-position: top;
+    background: no-repeat top/100% url('../../images/background.png');
     background-attachment: fixed;
+    min-height: 100%;
+
+    @media (max-width: 1350px) {
+      background-size: 150%;
+    }
+
+    @media (max-width: 999px) {
+      background-size: 250%;
+    }
+
+    @media (max-width: 580px) {
+      background-size: 300%;
+    }
+
+    @media (max-width: 500px) {
+      background-size: 450%;
+    }
+
+    @media (max-width: 400px) {
+      background-size: 500%;
+    }
   }
 
   &__dark-bg {
     background-color: rgba(0, 0, 0, 0.8);
+    background-attachment: fixed;
     height: 100vh;
+    min-height: 100%;
+
+    @media (max-width: 1350px) {
+      background-size: 150%;
+      height: unset;
+    }
   }
 
   &__button-wrapper {
@@ -198,7 +260,7 @@
   }
 }
 
-.statistic-wrapper {
+.statistic-content {
   display: flex;
   text-align: center;
   font-size: 14px;
@@ -206,6 +268,33 @@
   padding: 10px;
   margin: 20px;
   color: #ffffff;
+  padding-bottom: 190px;
+
+  @media (max-width: 1350px) {
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    .statistic-block {
+      align-items: center;
+    }
+
+    & > div {
+      display: flex;
+      flex-basis: calc(50% - 40px);
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    & > div > div {
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 770px) {
+    padding-bottom: 50px;
+  }
 }
 
 .statistic-header {
@@ -234,4 +323,11 @@
   background-size: 260px 260px;
 
   /* light green */
+
+  @media (max-width: 470px) {
+    padding: 0;
+    background-size: 240px 240px;
+    width: 240px;
+    height: 240px;
+  }
 }
