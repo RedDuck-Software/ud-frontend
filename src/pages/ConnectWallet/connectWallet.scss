@@ -28,6 +28,11 @@ span {
     justify-content: center;
     align-items: center;
 
+    @media (max-width: 620px) {
+      width: 100%;
+      margin: 0 15px;
+    }
+
     .cross-icon {
       position: absolute;
       opacity: 1;
@@ -45,6 +50,15 @@ span {
       width: 65%;
       height: 55%;
 
+      @media (max-width: 999px) {
+        width: 80%;
+      }
+
+      @media (max-width: 620px) {
+        width: 90%;
+        height: 60%;
+      }
+
       button {
         width: 100%;
         height: 50px;
@@ -59,6 +73,11 @@ span {
 
         &:hover {
           background-color: black;
+        }
+
+        @media (max-width: 620px) {
+          min-height: 50px;
+          height: unset;
         }
       }
     }

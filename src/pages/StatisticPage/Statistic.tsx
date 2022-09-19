@@ -111,86 +111,92 @@ function StatisticPage() {
     setGnosisError(false);
   }
   return (
-    <div className="statistic__background-photo">
-      {isModalActive && (
-        <ConnectWallet
-          setUser={setUser}
-          setIsActive={setIsModalActive}
-          setGnosisError={setGnosisError}
-          isGnosisError={isGnosisError}
-        />
-      )}
-      <div className="statistic__dark-bg">
-        <nav className="statistic__nav">
-          <p>Buggy DAO {buggyBalance ? buggyBalance : 0} DAO</p>
-          <button className="statistic__nav-center-button">
-            Multiply your donation by x3
-          </button>
-          <button
-            className="statistic__nav-connect-wallet"
-            style={
-              user || account
-                ? {
-                    background: '#232622',
-                    color: 'white',
-                  }
-                : {}
-            }
-            onClick={() =>
-              account || user ? handleLogout() : setIsModalActive(true)
-            }
+    <div className="statistic__wrapper">
+      <div className="statistic__background-photo">
+        {isModalActive && (
+          <ConnectWallet
+            setUser={setUser}
+            setIsActive={setIsModalActive}
+            setGnosisError={setGnosisError}
+            isGnosisError={isGnosisError}
+          />
+        )}
+        <div className="statistic__dark-bg">
+          <nav className="statistic__nav">
+            <p>Buggy DAO {buggyBalance ? buggyBalance : 0} DAO</p>
+            <button className="statistic__nav-center-button">
+              Multiply your donation by x3
+            </button>
+            <button
+              className="statistic__nav-connect-wallet"
+              style={
+                user || account
+                  ? {
+                      background: '#232622',
+                      color: 'white',
+                    }
+                  : {}
+              }
+              onClick={() =>
+                account || user ? handleLogout() : setIsModalActive(true)
+              }
+            >
+              {buttonText()}
+            </button>
+          </nav>
+          <div
+            onClick={() => navigate('/mint-page')}
+            className="statistic__go-back"
           >
-            {buttonText()}
-          </button>
-        </nav>
-        <div
-          onClick={() => navigate('/mint-page')}
-          className="statistic__go-back"
-        >
-          <BsFillArrowLeftSquareFill style={{ fontSize: '28px' }} />
-          <p>Back to Mint Page</p>
-        </div>
-        <div className="statistic-header">
-          <Audio height="80" width="80" color="#2df30d" ariaLabel="loading" />
-          <h1 className="statistic-title">Buggy DAO Statistic</h1>
-          <Audio height="80" width="80" color="#2df30d" ariaLabel="loading" />
-        </div>
+            <BsFillArrowLeftSquareFill style={{ fontSize: '28px' }} />
+            <p>Back to Mint Page</p>
+          </div>
+          <div className="statistic-header">
+            <Audio height="80" width="80" color="#2df30d" ariaLabel="loading" />
+            <h1 className="statistic-title">Buggy DAO Statistic</h1>
+            <Audio height="80" width="80" color="#2df30d" ariaLabel="loading" />
+          </div>
 
-        <div className="statistic-wrapper">
-          <div>
-            <h2>Total users</h2>
-            <div className="statistic-cirle">
-              {totalUsers ? totalUsers : totalUsers === 0 ? totalUsers : '...'}
+          <div className="statistic-content">
+            <div className="statistic-block">
+              <h2>Total users</h2>
+              <div className="statistic-cirle">
+                {totalUsers
+                  ? totalUsers
+                  : totalUsers === 0
+                  ? totalUsers
+                  : '...'}
+              </div>
             </div>
-          </div>
-          <div>
-            <h2>Total bought buggy</h2>
-            <div className="statistic-cirle">
-              {totalBoughtBuggy
-                ? totalBoughtBuggy
-                : totalBoughtBuggy === 0
-                ? totalBoughtBuggy
-                : '...'}
+            <div className="statistic-block">
+              <h2>Total bought buggy</h2>
+              <div className="statistic-cirle">
+                {totalBoughtBuggy
+                  ? totalBoughtBuggy
+                  : totalBoughtBuggy === 0
+                  ? totalBoughtBuggy
+                  : '...'}
+              </div>
             </div>
-          </div>
-          <div>
-            <h2>Total created buggy</h2>
-            <div className="statistic-cirle">
-              {totalCreatedBuggy
-                ? totalCreatedBuggy
-                : totalCreatedBuggy === 0
-                ? totalCreatedBuggy
-                : '...'}
+            <div className="statistic-block">
+              <h2>Total created buggy</h2>
+              <div className="statistic-cirle">
+                {totalCreatedBuggy
+                  ? totalCreatedBuggy
+                  : totalCreatedBuggy === 0
+                  ? totalCreatedBuggy
+                  : '...'}
+              </div>
             </div>
-          </div>
-          <div>
-            <h2>Total donated funds(MATIC)</h2>
-            <div className="statistic-cirle">
-              {totalBoughtBuggy
-                ? totalBoughtBuggy * 1500
-                : totalBoughtBuggy === 0
-                ? totalBoughtBuggy
-                : '...'}{' '}
+            <div className="statistic-block">
+              <h2>Total donated funds(MATIC)</h2>
+              <div className="statistic-cirle">
+                {totalBoughtBuggy
+                  ? totalBoughtBuggy * 1500
+                  : totalBoughtBuggy === 0
+                  ? totalBoughtBuggy
+                  : '...'}{' '}
+              </div>
             </div>
           </div>
         </div>
