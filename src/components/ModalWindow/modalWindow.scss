@@ -15,6 +15,7 @@
   border-radius: 20px;
   padding: 20px;
   box-shadow: 0px 4px 8px 4px #2fe212;
+  z-index: 99;
 
   .cross-icon {
     position: absolute;
@@ -23,9 +24,26 @@
     right: -15px;
     width: 35px;
     cursor: pointer;
+
+    @media (max-width: 550px) {
+      width: 30px;
+      top: -10px;
+      right: -10px;
+    }
+  }
+
+  @media (max-width: 550px) {
+    text-align: initial;
+    width: 230px;
+    bottom: 50px;
+    right: 35px;
   }
 }
 
 .modal-icon {
   width: 35px;
+
+  @media (max-width: 550px) {
+    width: 30px;
+  }
 }

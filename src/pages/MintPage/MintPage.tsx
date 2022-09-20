@@ -19,6 +19,7 @@ import ModalWindow from '../../components/ModalWindow/ModalWindow';
 import Loader from '../../components/Loader/Loader';
 
 import { getBuggyPrice } from '../../funcs/getBuggyPrice';
+import buggys from '../../MockJSON.json';
 
 interface INftObjs {
   id: string;
@@ -263,10 +264,13 @@ function MintPage() {
           <div className="mint-page__nfts">
             <div className="container">
               <div className="mint-page__nfts-grid">
-                {nftsImages?.length &&
+                {/* {nftsImages?.length &&
                   nftsImages.map((nft) => (
                     <NFT image={nft.image} key={nft.id} />
-                  ))}
+                  ))} */}
+                {buggys.map((item: any, id: number) => (
+                  <NFT image={item.image} key={item.id} />
+                ))}
               </div>
             </div>
           </div>
@@ -362,11 +366,10 @@ function MintPage() {
                       </button>
                     )}
                   </div>
-                  <div className="flex-d">
+                  <div className="total-price flex-d">
                     {selectedOption === 'Full' ? (
                       <span>
-                        Total price:
-                        {(+amountToDonate * buggyPrice).toFixed(3)}
+                        Total price: {(+amountToDonate * buggyPrice).toFixed(3)}
                       </span>
                     ) : (
                       <span>
