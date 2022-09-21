@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './App';
 import './index.scss';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
@@ -19,6 +20,7 @@ root.render(
   <React.StrictMode>
     <Router>
       <MoralisProvider serverUrl={servelUrl} appId={appId}>
+        <ScrollToTop />
         <App />
       </MoralisProvider>
     </Router>

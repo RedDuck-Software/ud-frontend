@@ -12,6 +12,10 @@
     position: relative;
     background-color: transparent;
     text-align: left;
+
+    @media (max-width: 870px) {
+      width: 250px;
+    }
   }
 }
 

@@ -16,6 +16,21 @@
       border-radius: 0px 60px;
       background-color: #151515;
     }
+
+    @media (max-width: 900px) {
+      width: 260px;
+      height: 260px;
+    }
+
+    @media (max-width: 749px) {
+      width: 200px;
+      height: 200px;
+    }
+
+    @media (max-width: 375px) {
+      width: 180px;
+      height: 180px;
+    }
   }
 
   &__image {

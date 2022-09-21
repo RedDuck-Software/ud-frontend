@@ -19,9 +19,22 @@
     margin-bottom: 80px;
     background: #151515;
     height: 60px;
-    cursor: pointer;
     transition: all 0.15s ease-in-out;
     padding: 0 60px;
+
+    @media (max-width: 1150px) {
+      flex-direction: column;
+      height: 150px;
+
+      p {
+        margin-bottom: -5px;
+      }
+
+      @media (max-width: 525px) {
+        height: 180px;
+        padding: 0 30px;
+      }
+    }
 
     &-center-button {
       font-size: 24px;
@@ -32,6 +45,14 @@
       background-color: #151515;
       border: none;
       margin: 0 auto;
+
+      @media (max-width: 1150px) {
+        margin: 10px;
+      }
+
+      @media (max-width: 600px) {
+        font-size: 20px;
+      }
     }
 
     &-connect-wallet {
@@ -52,10 +73,14 @@
       &:hover {
         background: #16a800;
       }
-    }
 
-    &:hover {
-      background-color: rgba(0, 0, 0, 1);
+      @media (max-width: 600px) {
+        height: 30px;
+      }
+
+      @media (max-width: 385px) {
+        width: 270px;
+      }
     }
 
     p {
@@ -64,14 +89,44 @@
   }
 
   &__background-photo {
-    background: no-repeat center/100% url('../../images/background.png');
-    background-position: top;
+    background: no-repeat top/100% url('../../images/background.png');
     background-attachment: fixed;
+
+    background-attachment: fixed;
+    min-height: 100%;
+
+    @media (max-width: 1350px) {
+      background-size: 150%;
+    }
+
+    @media (max-width: 999px) {
+      background-size: 250%;
+    }
+
+    @media (max-width: 580px) {
+      background-size: 300%;
+    }
+
+    @media (max-width: 500px) {
+      background-size: 450%;
+    }
+
+    @media (max-width: 400px) {
+      background-size: 500%;
+    }
   }
 
   &__dark-bg {
     padding-bottom: 50px;
     background-color: rgba(0, 0, 0, 0.8);
+
+    @media (max-width: 700px) {
+      padding-bottom: 25px;
+    }
+
+    @media (max-width: 500px) {
+      padding-bottom: 5px;
+    }
   }
 
   &__button-wrapper {
@@ -137,6 +192,10 @@
       border-radius: 60px 0px;
       margin: auto;
       padding: 31px 0;
+
+      @media (max-width: 1350px) {
+        width: 90%;
+      }
     }
 
     &-currency-amount {
@@ -146,6 +205,10 @@
       justify-content: center;
       align-items: center;
       background: rgb(0, 0, 0, 0.4);
+
+      @media (max-width: 500px) {
+        visibility: hidden;
+      }
 
       p {
         font-weight: 700;
@@ -161,11 +224,27 @@
       width: 50%;
       justify-content: space-between;
       align-items: center;
+
+      @media (max-width: 700px) {
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      @media (max-width: 500px) {
+        width: 100%;
+        justify-content: space-around;
+        flex-direction: column;
+        visibility: initial;
+      }
     }
   }
 
   &__nfts {
     margin: 60px 0;
+
+    @media (max-width: 800px) {
+      margin: 30px 0;
+    }
 
     ::-webkit-scrollbar {
       width: 8px;
@@ -192,12 +271,31 @@
     &-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      justify-items: center;
       grid-template-rows: auto auto;
       grid-auto-rows: 0px;
       grid-gap: 20px 0px;
       width: 100%;
       overflow: hidden;
       overflow-y: auto;
+
+      @media (max-width: 1350px) {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+
+      @media (max-width: 1145px) {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      @media (max-width: 900px) {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: unset;
+        max-height: 500px;
+      }
+
+      @media (max-width: 629px) {
+        grid-template-columns: 1fr;
+      }
     }
   }
 
@@ -206,6 +304,16 @@
     justify-content: center;
     gap: 125px;
     margin-top: 30px;
+
+    @media (max-width: 870px) {
+      gap: 75px;
+    }
+
+    @media (max-width: 700px) {
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 15px;
+    }
   }
 
   &__select,
@@ -216,7 +324,6 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
-    
   }
 
   &__input {
@@ -236,6 +343,15 @@
       &:focus {
         border: 1px solid #2fe212;
         outline: none;
+      }
+
+      @media (max-width: 870px) {
+        width: 250px;
+      }
+
+      @media (max-width: 375px) {
+        margin: 0px 5px;
+        width: 65%;
       }
     }
   }
@@ -264,6 +380,11 @@
     margin-top: 50px;
     margin-bottom: 100px;
     cursor: pointer;
+
+    @media (max-width: 700px) {
+      margin: 50px auto;
+      width: 85%;
+    }
   }
   &__donate-btn:hover {
     background: #16a800;
@@ -286,6 +407,11 @@
   font-size: 20px;
   line-height: 23px;
   margin-bottom: 5px;
+
+  @media (max-width: 375px) {
+    width: 95%;
+    margin: 0 auto;
+  }
 }
 
 .buggy-amount {
@@ -312,16 +438,19 @@
     border: 1px solid #2fe212;
     outline: none;
   }
+
+  @media (max-width: 870px) {
+    width: 85%;
+    height: 265px;
+  }
 }
 
 .amount-error {
   color: #dc143c;
 }
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button {  
-
-   opacity: 1;
-
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  opacity: 1;
 }
 
 .btn-counter {
@@ -331,6 +460,19 @@ input[type=number]::-webkit-outer-spin-button {
   border-radius: 50%;
   color: #000;
   border: 4px solid rgb(9, 9, 9);
+
+  @media (max-width: 870px) {
+    width: 35px;
+    height: 35px;
+  }
+
+  @media (max-width: 375px) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .btn-counter:hover {
@@ -339,25 +481,35 @@ input[type=number]::-webkit-outer-spin-button {
   height: 40px;
   border-radius: 50%;
   color: #000;
- 
+
+  @media (max-width: 870px) {
+    width: 35px;
+    height: 35px;
+  }
 }
-.mint-page-headers{
+.mint-page-headers {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
-.input-text-amount{ 
+.input-text-amount {
   display: flex;
   flex-direction: column;
 }
 
-.flex-d{
+.flex-d {
   display: flex;
   flex-direction: column;
 }
 
-.full-part{
+.full-part {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.total-price {
+  @media (max-width: 550px) {
+    margin-top: 0.5rem;
+  }
 }
