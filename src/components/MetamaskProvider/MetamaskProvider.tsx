@@ -1,4 +1,5 @@
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core';
+import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 
 import { injected } from '../../helper/connectors';
@@ -18,7 +19,8 @@ function MetamaskProvider({
   } = useWeb3React();
   const [loaded, setLoaded] = useState(false);
   const isWrongNetwork = error && error instanceof UnsupportedChainIdError;
-  const chainHex = process.env.REACT_APP_CHAIN_HEX;
+  const chainId = process.env.REACT_APP_NETWORK_CHAINID;
+  const chainHex = ethers.utils.hexlify(Number(chainId!));
 
   useEffect(() => {
     injected
