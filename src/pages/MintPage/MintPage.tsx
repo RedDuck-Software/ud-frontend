@@ -158,6 +158,7 @@ function MintPage() {
   };
 
   async function handleLogout() {
+    localStorage.setItem('disconnect', 'true');
     deactivate();
     setUser('');
     setGnosisError(false);

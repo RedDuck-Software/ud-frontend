@@ -13,6 +13,7 @@ const ConnectWallet = (props: any) => {
   async function connectMetamask() {
     try {
       await activate(injected);
+      localStorage.setItem('disconnect', 'false');
       setIsActive(false);
     } catch (e) {
       console.log(e);
