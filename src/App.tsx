@@ -7,6 +7,7 @@ import { Web3ReactProvider } from '@web3-react/core';
 import React, { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
+import MetamaskProvider from './components/MetamaskProvider/MetamaskProvider';
 import LandingPage from './pages/LandingPage/LandingPage';
 import MintPage from './pages/MintPage/MintPage';
 import StatisticPage from './pages/StatisticPage/Statistic';
@@ -30,11 +31,13 @@ const App: FC = () => {
   return (
     <>
       <Web3ReactProvider getLibrary={getLibrary}>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/mint-page" element={<MintPage />} />
-          <Route path="/statistic-page" element={<StatisticPage />} />
-        </Routes>
+        <MetamaskProvider>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/mint-page" element={<MintPage />} />
+            <Route path="/statistic-page" element={<StatisticPage />} />
+          </Routes>
+        </MetamaskProvider>
       </Web3ReactProvider>
     </>
   );
