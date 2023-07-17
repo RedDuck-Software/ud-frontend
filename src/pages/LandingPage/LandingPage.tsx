@@ -65,7 +65,14 @@ const LandingPage = () => {
               </div>
 
               <div className="landing__text-2">
-                <img className="landing__text-2-img" src={image1} alt="" />
+                <div className="landing__text-2-img-wrapper">
+                  <div className="landing__text-2-img-container">
+                    <iframe
+                      src="https://youtube.com/embed/D9AdnJiXTQ0?feature=share"
+                      className="landing__text-2-img"
+                    />
+                  </div>
+                </div>
                 <div className="landing__text-2-wrapper">
                   <hr className="green-line" />
                   <p className="landing__text-2-text">
